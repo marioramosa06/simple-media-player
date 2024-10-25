@@ -1,0 +1,218 @@
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        overflow-y: hidden;
+    }
+
+    body {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .hide {
+        animation: hide linear .8s;
+        opacity: 0;
+    }
+
+    @keyframes hide {
+        0% {
+            opacity: 1;
+            /* bottom: 20px; */
+        }
+
+        50% {
+            opacity: 0.5;
+            /* bottom: -30px; */
+        }
+
+        100% {
+            opacity: 0;
+            /* bottom: -65px; */
+        }
+    }
+
+    .file-picker {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgb(255, 238, 205);
+        color: rgb(5, 5, 5);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: medium;
+        margin-right: 5px
+    }
+
+    .file-picker:hover {
+        background-color: rgb(247, 232, 205);
+        color: black;
+    }
+
+    video {
+        width: 100%;
+        height: 100%;
+    }
+
+    .controls {
+        user-select: none;
+        position: absolute;
+        left: 50%;
+        bottom: 15px;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 450px;
+        max-width: 600px;
+        width: 90%;
+        height: auto;
+        background-color: rgb(255, 255, 255);
+        color: rgb(15, 15, 15);
+        /* backdrop-filter: blur(5px); */
+        border-radius: 25px;
+        padding: 5px;
+    }
+
+    .controls .time-slider {
+        width: 60%;
+        height: 100%;
+        padding: 5px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        /* background-color: rgb(255, 238, 205); */
+        /* border-radius: 20px; */
+    }
+
+    .controls .time-slider .time {
+        width: 60px;
+        font-size: small;
+        font-weight: bold;
+        /* background-color: aqua; */
+    }
+
+    .controls .time-slider #time-elapsed {
+        text-align: left;
+    }
+
+    .controls .time-slider #time-total {
+        text-align: right;
+    }
+
+    .controls .time-slider .slider {
+        width: 70%;
+        /* height: 10px; */
+        /* margin: 0 5px; */
+        /* background-color: rgb(231, 35, 0); */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* border-radius: 5px; */
+    }
+
+    .controls .time-slider #slider {
+        -webkit-appearance: none;
+        /* Remove default appearance */
+        appearance: none;
+        /* Remove default appearance */
+        width: 100%;
+        /* Set the width */
+        height: 10px;
+        /* Set the height */
+        background-color: #dddddd;
+        /* Set the background color */
+        border-radius: 5px;
+        /* Set the border radius */
+        outline: none;
+        /* Remove the outline */
+        cursor: pointer;
+    }
+
+    #slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        /* Remove default appearance */
+        appearance: none;
+        /* Remove default appearance */
+        width: 5px;
+        /* Set the width of the thumb */
+        height: 10px;
+        /* Set the height of the thumb */
+        background-color: #000000;
+        /* Set the background color of the thumb */
+        /* border-radius: 50%; */
+        /* Make the thumb round */
+        cursor: pointer;
+        /* Change the cursor to a pointer */
+        box-shadow: -600px 0 1px 600px wheat;
+    }
+
+
+    .controls .control-container {
+        width: 20%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background-color: wheat;
+        border-radius: 20px;
+    }
+
+    .controls .control {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* background-color: rgb(255, 238, 205); */
+        /* color: rgb(5, 5, 5); */
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: large;
+    }
+
+    /* .controls #prevBtn {
+        text-align: left;
+    }
+
+    .controls #nextBtn {
+        text-align: right;
+    } */
+
+    .controls #play-btn {
+        /* width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: rgb(255, 238, 205);
+        color: rgb(5, 5, 5);
+        display: flex;
+        align-items: center;
+        justify-content: center; */
+        cursor: pointer;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    /* .controls #play-btn i {
+        font-size: 1.2em;
+        text-align: center;
+    } */
+
+    .controls #play-btn .ri-play-fill {
+        margin-left: 2px
+    }
+
+    .control:hover {
+        background-color: rgb(247, 232, 205);
+        color: black;
+    }
+
+    .control:active {
+        transform: scale(0.9);
+        transition: ease-in-out .5s;
+    }

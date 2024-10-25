@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Video Player</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts/remixicon.css">
+</head>
+
+<body>
+    <!-- <button class="file-picker">
+        <input type="file" name="file" id="fle">
+    </button> -->
+
+    
+
+
+    <video src="" id="video" preload="auto" autoplay>video not supported</video>
+    <div class="controls">
+    
+        <label for="file" class="file-picker">
+            <i class="ri-folder-open-fill"></i>
+            <input type="file" name="file" id="file" class="file-picker" style="display:none" accept="video/*" multiple>
+        </label>
+        
+        <div class="time-slider">
+
+            <div class="time" id="time-elapsed">00:00</div>
+            <div class="slider">
+                <input type="range" id="slider" min="0" max="" value="0">
+            </div>
+            <div class="time" id="time-total">00:00</div>
+
+        </div>
+        <div class="control-container">
+            
+            <div class="control" id="prev-btn">
+                <i class="ri-skip-back-fill" id="prev-btn-icon"></i>
+            </div>
+            <div class="control" id="play-btn">
+                <i class="ri-play-fill" id="play-btn-icon"></i>
+            </div>
+            <div class="control" id="next-btn">
+                <i class="ri-skip-forward-fill" id="next-btn-icon"></i>
+            </div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

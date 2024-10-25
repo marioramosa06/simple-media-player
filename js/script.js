@@ -90,6 +90,12 @@ window.addEventListener("keydown", function (e) {
             video.currentTime = video.currentTime + 5
         }
     }
+    if (e.key == "P" || e.key == "p") {
+        prevFile()
+    }
+    if (e.key == "N" || e.key == "n") {
+        nextFile()
+    }
 });
 
 let controlsVisivilityTimeOut = null;

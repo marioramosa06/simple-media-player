@@ -13,3 +13,5 @@ git clone https://github.com/marioramosa06/simple-video-player.git
 
 2. Run : 
 Open the index.html file in your web browser.
+
+live at https://marioramosa06.github.io/simple-video-player/

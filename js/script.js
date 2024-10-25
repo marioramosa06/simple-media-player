@@ -8,7 +8,8 @@ const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const slider = document.getElementById("slider");
 const elapsedTime = document.getElementById("time-elapsed");
-const totalTime = document.getElementById("time-total")
+const totalTime = document.getElementById("time-total");
+const fileName = document.querySelector(".file-name");
 
 let playlist = [];
 let videoIndex = 0;
@@ -45,7 +46,9 @@ function loadVideo() {
     };
 
     if (file.DONE) {
-        htmlTitle.innerText = playlist[videoIndex].name;
+        let name = playlist[videoIndex].name
+        htmlTitle.innerText = name
+        fileName.innerHTML = name
         window.setInterval(function () {
             slider.value = Math.floor(video.currentTime);
             // totalTime.innerText = timeFormat(videoDuration - video.currentTime)
@@ -97,9 +100,11 @@ window.addEventListener("mousemove", function () {
     }
     if (controls.classList.contains("hide")) {
         controls.classList.remove("hide");
+        fileName.classList.remove("hide")
     }
     controlsVisivilityTimeOut = this.setTimeout(() => {
         controls.classList.add("hide");
+        fileName.classList.add("hide");
         controlsVisivilityTimeOut = null;
     }, 3000);
 });

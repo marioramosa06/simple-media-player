@@ -34,6 +34,18 @@
         }
     }
 
+    .file-name {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: fit-content;
+        padding: 5px 8px;
+        font-size: medium;
+        font-weight: bold;
+        background-color: rgba(255, 255, 255, 0.89);
+    }
+
     .file-picker {
         width: 40px;
         height: 40px;

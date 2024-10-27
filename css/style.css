@@ -13,8 +13,10 @@
     }
 
     .hide {
-        animation: hide linear .8s;
-        opacity: 0;
+        display: none;
+        /* animation: hide linear .8s;
+        opacity: 0; */
+        visibility: hidden;
     }
 
     @keyframes hide {
@@ -36,14 +38,15 @@
 
     .file-name {
         position: absolute;
-        top: 10px;
+        top: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: fit-content;
-        padding: 5px 8px;
+        width: 100vw;
+        padding: 5px;
         font-size: medium;
         font-weight: bold;
-        background-color: rgba(255, 255, 255, 0.89);
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.397);
     }
 
     .file-picker {
@@ -80,9 +83,9 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        min-width: 450px;
-        max-width: 600px;
-        width: 90%;
+        min-width: 350px;
+        max-width: 100%;
+        width: 600px;
         height: auto;
         background-color: rgb(255, 255, 255);
         color: rgb(15, 15, 15);

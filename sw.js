@@ -1,20 +1,23 @@
+const cacheName = 'static'
+const assets = [
+    '/',
+    '/index.html',
+    '/manifest.json',
+    '/css/style.css',
+    '/images/logo192.jpg',
+    '/images/logo512.jpg',
+    '/images/next.svg',
+    '/images/open.svg',
+    '/images/pause.svg',
+    '/images/play.svg',
+    '/images/prev.svg',
+    '/js/script.js'
+]
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open('my-cache')
+        caches.open(cacheName)
             .then(cache => {
-                return cache.addAll([
-                    '/',
-                    '/index.html',
-                    '/manifest.json',
-                    '/css/style.css',
-                    '/css/fonts/remixicon.css',
-                    '//css/fonts/remixicon.woff',
-                    '/css/fonts/remixicon.woff2',
-                    '/images/logo192.jpg',
-                    '/images/logo512.jpg',
-                    '/js/script.js'
-                    // ... autres fichiers
-                ]);
+                cache.addAll(assets);
             })
     );
 });

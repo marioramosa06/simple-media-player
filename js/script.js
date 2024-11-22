@@ -10,6 +10,10 @@ const slider = document.getElementById("slider");
 const elapsedTime = document.getElementById("time-elapsed");
 const totalTime = document.getElementById("time-total");
 const fileName = document.querySelector(".file-name");
+const loader = document.querySelector(".loader");
+const playlistTrigger = document.querySelector(".playlist-trigger");
+const playlistContainer = document.querySelector(".playlist-container");
+const playlistItems = document.querySelector(".playlist");
 
 let playlist = [];
 let videoIndex = 0;
@@ -30,22 +34,34 @@ function timeFormat(t) {
 }
 
 function loadVideo() {
+    // console.log(playlist);
+    loader.classList.remove("hide")
+
     let file = new FileReader();
     file.readAsDataURL(playlist[videoIndex]);
     file.onload = () => {
         video.setAttribute("src", file.result);
+        // loader.classList.add("hide")
+
     };
 
     let videoDuration = 0
+
     video.onloadedmetadata = function () {
-        console.log('metadata loaded!');
-        console.log(this.duration); //this refers to myVideo
+        // console.log('metadata loaded!');
+        // console.log(this.duration);
         videoDuration = this.duration
         totalTime.innerText = timeFormat(videoDuration)
         slider.max = Math.floor(videoDuration);
     };
 
+    video.oncanplay = function () {
+        loader.classList.add("hide")
+    }
+
     if (file.DONE) {
+        // console.log("video loaded");
+
         let name = playlist[videoIndex].name
         htmlTitle.innerText = name
         fileName.innerHTML = name
@@ -100,7 +116,8 @@ window.addEventListener("keydown", function (e) {
 
 let controlsVisivilityTimeOut = null;
 
-window.addEventListener("mousemove", function () {
+controls.addEventListener("mouseenter", function (e) {
+    // console.log(e, "enter");
     if (controlsVisivilityTimeOut !== null) {
         window.clearTimeout(controlsVisivilityTimeOut);
     }
@@ -108,18 +125,45 @@ window.addEventListener("mousemove", function () {
         controls.classList.remove("hide");
         fileName.classList.remove("hide")
     }
-    controlsVisivilityTimeOut = this.setTimeout(() => {
+})
+
+controls.addEventListener("mouseleave", function (e) {
+    // console.log(e, "leave");
+    controlsVisivilityTimeOut = window.setTimeout(() => {
         controls.classList.add("hide");
         fileName.classList.add("hide");
+        if (!playlistContainer.classList.contains("hide")) {
+            playlistContainer.classList.add("hide")
+        }
         controlsVisivilityTimeOut = null;
     }, 3000);
-});
-
+})
 
 filePicker.addEventListener("change", function () {
     playlist = filePicker.files;
+    Array.from(playlist).forEach((item, index) => {
+        playlistItems.innerHTML += `<li class="playlist-item" id=${index}>
+        <span>${index + 1} - </span> <span>${item.name}</span>
+        </li>`
+
+    })
+    listItem = document.querySelectorAll(".playlist-item");
+
+    Array.from(listItem).map(e => {
+        e.addEventListener("click", function () {
+            // console.log(e.id);
+            videoIndex = e.id
+            loadVideo()
+        })
+        playlistContainer.classList.add("hide")
+    })
     loadVideo();
 });
+
+playlistTrigger.addEventListener("click", function () {
+    playlistContainer.classList.toggle("hide")
+})
+
 
 playBtn.addEventListener("click", function () {
     changePlayState();
@@ -142,17 +186,20 @@ slider.addEventListener("input", function () {
 
 //change play button state
 video.addEventListener("play", function () {
-    playBtnIcon.classList.remove("ri-play-fill")
-    playBtnIcon.classList.add("ri-pause-fill")
+    // playBtnIcon.classList.remove("ri-play-fill")
+    // playBtnIcon.classList.add("ri-pause-fill")
+    playBtn.innerHTML = `<img src="/images/pause.svg">`
 });
 video.addEventListener("pause", function () {
-    playBtnIcon.classList.remove("ri-pause-fill")
-    playBtnIcon.classList.add("ri-play-fill")
+    // playBtnIcon.classList.remove("ri-pause-fill")
+    // playBtnIcon.classList.add("ri-play-fill")
+    playBtn.innerHTML = `<img src="/images/play.svg" id="play-btn-icon">`
 });
+
 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('../sw.js')
             .then(registration => {
                 console.log('Service Worker registered:', registration);
             })

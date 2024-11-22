@@ -2,50 +2,83 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="title">Video Player</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/fonts/remixicon.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="title">Video Player</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/fonts/remixicon.css" />
 </head>
 
 <body>
-    <span class="file-name">
-        no video file
-    </span>
-    
-    <video src="" id="video" preload="auto" autoplay></video>
-    <div class="controls">
-    
-        <label for="file" class="file-picker" title="Open files">
-            <i class="ri-folder-open-fill"></i>
-            <input type="file" name="file" id="file" class="file-picker" style="display:none" accept="video/*" multiple>
-        </label>
-        
-        <div class="time-slider">
+  <div class="loader hide">
+    <div class="spinner"></div>
+    <span>Loading...</span>
+  </div>
+  <span class="file-name"> No video currently playing </span>
 
-            <div class="time" id="time-elapsed">00:00</div>
-            <div class="slider">
-                <input type="range" id="slider" min="0" max="" value="0">
-            </div>
-            <div class="time" id="time-total">00:00</div>
+  <video src="" id="video" preload="auto" autoplay>
 
+  </video>
+  <div class="playlist-container hide">
+          <ul class="playlist">
+            <!-- <h5>Playlist :</h5> -->
+          </ul>
         </div>
-        <div class="control-container">
-            
-            <div class="control" id="prev-btn">
-                <i class="ri-skip-back-fill" id="prev-btn-icon"></i>
-            </div>
-            <div class="control" id="play-btn">
-                <i class="ri-play-fill" id="play-btn-icon"></i>
-            </div>
-            <div class="control" id="next-btn">
-                <i class="ri-skip-forward-fill" id="next-btn-icon"></i>
-            </div>
-        </div>
+  <div class="controls">
+
+    <div class="time-slider">
+      <div class="time" id="time-elapsed">00:00</div>
+      <div class="slider">
+        <input type="range" id="slider" min="0" max="" value="0" />
+      </div>
+      <div class="time" id="time-total">00:00</div>
     </div>
-    <script src="js/script.js"></script>
+    <div class="bottom-container">
+      <div class="bottom start">
+        <label for="file" class="file-picker" title="Open files">
+          <!-- <i class="ri-folder-open-fill"></i> -->
+          <img src="/images/open.svg" alt="">
+          <input type="file" name="file" id="file" class="file-picker" style="display: none" accept="video/*"
+            multiple />
+        </label>
+
+        <div class="playlist-trigger">
+          <img src="/images/list.svg" alt="">
+        </div>
+
+        
+      </div>
+
+
+
+      <div class="control-container">
+        <div class="control" id="prev-btn">
+          <!-- <i class="ri-skip-back-fill" id="prev-btn-icon"></i> -->
+          <img src="/images/prev.svg" alt="">
+        </div>
+        <div class="control" id="play-btn">
+          <!-- <i class="ri-play-fill" id="play-btn-icon"></i> -->
+          <img id="play-btn-icon" src="/images/play.svg" alt="">
+        </div>
+        <div class="control" id="next-btn">
+          <!-- <i class="ri-skip-forward-fill" id="next-btn-icon"></i> -->
+          <img src="/images/next.svg" alt="">
+        </div>
+      </div>
+
+      <div class="bottom end">
+        <div class="volume-icon">
+          <img src="/images/volume.svg" alt="">
+        </div>
+
+        <!-- <div class="volume-slider">
+          <input type="range" name="" id="">
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <script src="js/script.js"></script>
 </body>
 
 </html>

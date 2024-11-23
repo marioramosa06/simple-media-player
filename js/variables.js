@@ -1,0 +1,16 @@
+const filePicker = document.querySelector("#file");
+const video = document.querySelector("#video");
+const controls = document.querySelector(".controls");
+const playBtn = document.querySelector("#play-btn");
+const playBtnIcon = document.querySelector("#play-btn-icon");
+const prevBtn = document.querySelector("#prev-btn");
+const nextBtn = document.querySelector("#next-btn");
+const slider = document.querySelector("#slider");
+const elapsedTime = document.querySelector("#time-elapsed");
+const totalTime = document.querySelector("#time-total");
+const fileName = document.querySelector(".file-name");
+const loader = document.querySelector(".loader");
+const playlistTrigger = document.querySelector(".playlist-trigger");
+const playlistContainer = document.querySelector(".playlist-container");
+// const playlistItems = document.querySelector(".playlist");
+let playlistClose = document.querySelector(".close-playlist")

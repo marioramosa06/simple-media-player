@@ -121,9 +121,9 @@
         width: 90%;
         max-width: 500px;
         /* height: 30px; */
-        background-color: rgb(255, 255, 255);
+        background-color: rgba(255, 255, 255, 0.678);
         color: rgb(0, 0, 0);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(5px);
         border-radius: 15px;
         padding: 10px;
         /* box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.432); */
@@ -142,7 +142,7 @@
     }
 
     .controls .time-slider .time {
-        width: 58px;
+        width: 60px;
         font-size: small;
         font-weight: bold;
         /* background-color: aqua; */
@@ -173,7 +173,7 @@
         /* border-radius: 5px; */
     }
 
-    .controls .time-slider #slider {
+    .controls .time-slider #slider, #volume {
         -webkit-appearance: none;
         appearance: none;
         width: 100%;
@@ -184,7 +184,7 @@
         cursor: pointer;
     }
 
-    #slider::-webkit-slider-thumb {
+    #slider::-webkit-slider-thumb, #volume::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
         width: 5px;
@@ -248,7 +248,7 @@
 
     .controls #play-btn-icon {
         margin-left: 4px;
-        /* width: .8rem; */
+        width: 1.8rem;
     }
 
     .control:hover {
@@ -310,15 +310,15 @@
 
     .playlist-container {
         position: absolute;
-        top: 50%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        bottom: 120px;
+        transform: translateX(-50%);
         min-width: 250px;
         width: 70%;
         max-width: 300px;
         /* min-height: 50px; */
         /* height: auto; */
-        height: 70vh;
+        height: 50vh;
         background-color: #ffffff;
         box-shadow: 0 0 1px 1px rgb(233, 233, 233);
         padding: 8px;
@@ -333,7 +333,7 @@
         overflow-y: scroll;
         font-size: small;
         font-weight: bold;
-        padding-top: 25px;
+        /* padding-top: 25px; */
     }
 
     .playlist .playlist-item {
@@ -362,7 +362,7 @@
         left: 0;
         padding-left: 10px;
         width: 100%;
-        height: 30px;
+        height: 35px;
         background-color: rgba(255, 255, 255, 0.911);
         display: flex;
         align-items: center;
@@ -371,17 +371,21 @@
 
     .playlist-container .close-playlist {
         position: absolute;
-        right: 0;
-        top: 0;
-        height: 30px;
+        right: 2px;
+        top: 2px;
+        width: 25px;
+        height: 25px;
         border: none;
         background-color: var(--accent);
-        padding: 5px 8px;
-        border-radius: 5px;
+        padding: 2px;
+        border-radius: 10px;
         cursor: pointer;
-        font-size: small;
+        font-size: smaller;
         font-weight: bold;
-        /* border: 1px solid white; */
+        /* border: 5px solid white; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .end {
@@ -397,11 +401,17 @@
         width: 1.5rem;
     }
     .end .volume-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        width: 40px;
+        /* width: 40px; */
+        cursor: pointer;
+        margin-right: 10px;
     }
     .end .volume-slider {
         width: 70px;
+        padding-right: 10px;
     }
 
     .volume-slider input {

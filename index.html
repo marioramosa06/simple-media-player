@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mg">
 
 <head>
   <meta charset="UTF-8" />
@@ -13,19 +13,17 @@
 <body>
   <div class="loader hide">
     <div class="spinner"></div>
-    <span>Loading...</span>
+    <span>andraso kely ...</span>
   </div>
-  <span class="file-name"> No media currently playing </span>
+  <span class="file-name"> tsy mbola misy zavatra mandeha </span>
 
   <video src="" id="video" preload="auto" autoplay poster="">
-    
+
   </video>
   <div class="playlist-container remove">
-          <!-- <ul class="playlist">
-            <h3>Playlist :</h3>
-          </ul> -->
-          <!-- <button type="button" class="close-playlist">close</button> -->
-        </div>
+    mifidiana hira aloha
+    <button type="button" class="close-playlist">X</button>
+  </div>
   <div class="controls">
 
     <div class="time-slider">
@@ -37,32 +35,32 @@
     </div>
     <div class="bottom-container">
       <div class="bottom start">
-        <label for="file" class="file-picker" title="Open files">
+        <label for="file" class="file-picker" title="hifidy hira">
           <!-- <i class="ri-folder-open-fill"></i> -->
           <img src="/images/open.svg" alt="">
           <input type="file" name="file" id="file" class="file-picker" style="display: none" accept="video/*,audio/*"
             multiple />
         </label>
 
-        <div class="playlist-trigger">
+        <div class="playlist-trigger" title="lisitry ny hira">
           <img src="/images/list.svg" alt="">
         </div>
 
-        
+
       </div>
 
 
 
       <div class="control-container">
-        <div class="control" id="prev-btn">
+        <div class="control" id="prev-btn" title="teo aloha">
           <!-- <i class="ri-skip-back-fill" id="prev-btn-icon"></i> -->
           <img src="/images/prev.svg" alt="">
         </div>
-        <div class="control" id="play-btn">
+        <div class="control" id="play-btn" title="alefa / atsahatra">
           <!-- <i class="ri-play-fill" id="play-btn-icon"></i> -->
           <img id="play-btn-icon" src="/images/play.svg" alt="">
         </div>
-        <div class="control" id="next-btn">
+        <div class="control" id="next-btn" title="manaraka">
           <!-- <i class="ri-skip-forward-fill" id="next-btn-icon"></i> -->
           <img src="/images/next.svg" alt="">
         </div>
@@ -70,16 +68,20 @@
 
       <div class="bottom end">
         <div class="volume-icon">
-          <img src="/images/volume.svg" alt="">
+          <img class="volume-icon-img" src="/images/volume.svg" alt="">
         </div>
+        <div class="volume-slider" title="80%">
+          <input type="range" id="volume" min="0" max="100" value="80" disabled>
 
-        <!-- <div class="volume-slider">
-          <input type="range" name="" id="">
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
-  <script src="js/script.js"></script>
+  <script src="js/variables.js"></script>
+  <script src="js/functions.js"></script>
+  <script src="js/app.js"></script>
+
+
 </body>
 
 </html>

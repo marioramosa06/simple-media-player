@@ -1,91 +1,33 @@
-const htmlTitle = document.getElementById("title");
-const filePicker = document.querySelector("#file");
-const video = document.querySelector("#video");
-const controls = document.querySelector(".controls");
-const playBtn = document.getElementById("play-btn");
-const playBtnIcon = document.getElementById("play-btn-icon");
-const prevBtn = document.getElementById("prev-btn");
-const nextBtn = document.getElementById("next-btn");
-const slider = document.getElementById("slider");
-const elapsedTime = document.getElementById("time-elapsed");
-const totalTime = document.getElementById("time-total");
-const fileName = document.querySelector(".file-name");
-const loader = document.querySelector(".loader");
-const playlistTrigger = document.querySelector(".playlist-trigger");
-const playlistContainer = document.querySelector(".playlist-container");
-// const playlistItems = document.querySelector(".playlist");
-let playlistClose
+playlistClose.addEventListener("click", function () {
+    playlistContainer.classList.add("remove");
+});
+
 
 let playlist = [];
 let videoIndex = 0;
 
-function changePlayState() {
-    if (video.paused) {
-        video.play();
+let volume = document.querySelector("#volume")
+volume.addEventListener("input", function () {
+    video.volume = volume.value / 100
+    document.querySelector(".volume-slider")
+        .setAttribute("title", `feo: ${volume.value}%`)
+})
+
+let volumeIcon = document.querySelector(".volume-icon-img")
+
+volumeIcon.addEventListener("click", function () {
+    if (!video.muted) {
+        video.muted = true
+        this.src = "/images/volume-mute.svg"
+        volume.disabled = true
+        volume.style.cursor = "not-allowed"
     } else {
-        video.pause();
+        video.muted = false
+        this.src = "/images/volume.svg"
+        volume.disabled = false
+        volume.style.cursor = "pointer"
     }
-}
-
-function timeFormat(t) {
-    let min = Math.floor(t / 60);
-    let sec = Math.floor(t - min * 60);
-    let time = `${min > 9 ? min : "0" + min} : ${sec > 9 ? sec : "0" + sec}`;
-    return time;
-}
-
-function loadVideo() {
-    // console.log(playlist);
-    loader.classList.remove("hide");
-
-    let file = new FileReader();
-    file.readAsDataURL(playlist[videoIndex]);
-    file.onload = () => {
-        video.setAttribute("src", file.result);
-        // loader.classList.add("hide")
-    };
-
-    let videoDuration = 0;
-
-    video.onloadedmetadata = function () {
-        // console.log('metadata loaded!');
-        // console.log(this.duration);
-        videoDuration = this.duration;
-        totalTime.innerText = timeFormat(videoDuration);
-        slider.max = Math.floor(videoDuration);
-    };
-
-    video.oncanplay = function () {
-        loader.classList.add("hide");
-
-        let name = playlist[videoIndex].name;
-
-        htmlTitle.innerText = name;
-        fileName.innerHTML = `${videoIndex + 1} / ${playlist.length} - ${name}`;
-        window.setInterval(function () {
-            slider.value = Math.floor(video.currentTime);
-            // totalTime.innerText = timeFormat(videoDuration - video.currentTime)
-            elapsedTime.innerText = timeFormat(video.currentTime);
-            if (video.ended) {
-                nextFile();
-            }
-        }, 1000);
-    };
-}
-
-function prevFile() {
-    if (videoIndex > 0) {
-        videoIndex--;
-        loadVideo();
-    }
-}
-
-function nextFile() {
-    if (videoIndex < playlist.length - 1) {
-        videoIndex++;
-        loadVideo();
-    }
-}
+})
 
 window.addEventListener("keydown", function (e) {
     e.preventDefault;
@@ -150,8 +92,8 @@ filePicker.addEventListener("change", function () {
     });
 
     // console.log(playlistItems);
-    playlistContainer.innerHTML = `<h4 class="playlist-title">Playlist :</h4>`
-    playlistContainer.innerHTML += `<button type="button" class="close-playlist">close</button>`;
+    // playlistContainer.innerHTML = `<h4 class="playlist-title">Lisitra :</h4>`
+    playlistContainer.innerHTML = `<button type="button" class="close-playlist">X</button>`;
     playlistContainer.append(playlistItems);
 
     playlistClose = document.querySelector(".close-playlist");
@@ -209,6 +151,8 @@ video.addEventListener("pause", function () {
     // playBtnIcon.classList.add("ri-play-fill")
     playBtn.innerHTML = `<img src="/images/play.svg" id="play-btn-icon">`;
 });
+
+
 
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {

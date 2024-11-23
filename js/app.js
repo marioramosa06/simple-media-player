@@ -76,43 +76,46 @@ controls.addEventListener("mouseleave", function (e) {
 });
 
 filePicker.addEventListener("change", function () {
-    playlist = filePicker.files;
+    if (filePicker.files.length > 0) {
 
-    let playlistItems = document.createElement("ul");
-    playlistItems.setAttribute("class", "playlist");
-    Array.from(playlist).forEach((item, index) => {
-        // playlistItems.innerHTML += `<li class="playlist-item" id=${index}>
-        // <span>${index + 1} - </span> <span>${item.name}</span>
-        // </li>`
-        let li = document.createElement("li");
-        li.setAttribute("id", index);
-        li.setAttribute("class", "playlist-item");
-        li.innerHTML = `<span>${index + 1} - </span> <span>${item.name}</span>`;
-        playlistItems.append(li);
-    });
+        playlist = filePicker.files;
 
-    // console.log(playlistItems);
-    // playlistContainer.innerHTML = `<h4 class="playlist-title">Lisitra :</h4>`
-    playlistContainer.innerHTML = `<button type="button" class="close-playlist">X</button>`;
-    playlistContainer.append(playlistItems);
-
-    playlistClose = document.querySelector(".close-playlist");
-
-    playlistClose.addEventListener("click", function () {
-        playlistContainer.classList.add("remove");
-    });
-
-    listItem = document.querySelectorAll(".playlist-item");
-
-    Array.from(listItem).map((e) => {
-        e.addEventListener("click", function () {
-            // console.log(e.id);
-            playlistContainer.classList.add("remove");
-            videoIndex = parseInt(e.id);
-            loadVideo();
+        let playlistItems = document.createElement("ul");
+        playlistItems.setAttribute("class", "playlist");
+        Array.from(playlist).forEach((item, index) => {
+            // playlistItems.innerHTML += `<li class="playlist-item" id=${index}>
+            // <span>${index + 1} - </span> <span>${item.name}</span>
+            // </li>`
+            let li = document.createElement("li");
+            li.setAttribute("id", index);
+            li.setAttribute("class", "playlist-item");
+            li.innerHTML = `<span>${index + 1} - </span> <span>${item.name}</span>`;
+            playlistItems.append(li);
         });
-    });
-    loadVideo();
+
+        // console.log(playlistItems);
+        // playlistContainer.innerHTML = `<h4 class="playlist-title">Lisitra :</h4>`
+        playlistContainer.innerHTML = `<button type="button" class="close-playlist">X</button>`;
+        playlistContainer.append(playlistItems);
+
+        playlistClose = document.querySelector(".close-playlist");
+
+        playlistClose.addEventListener("click", function () {
+            playlistContainer.classList.add("remove");
+        });
+
+        listItem = document.querySelectorAll(".playlist-item");
+
+        Array.from(listItem).map((e) => {
+            e.addEventListener("click", function () {
+                // console.log(e.id);
+                playlistContainer.classList.add("remove");
+                videoIndex = parseInt(e.id);
+                loadVideo();
+            });
+        });
+        loadVideo();
+    }
 });
 
 playlistTrigger.addEventListener("click", function () {

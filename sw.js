@@ -15,8 +15,11 @@ const assets = [
     '/images/list.svg',
     '/images/volume.svg',
     '/images/volume-mute.svg',
-    '/js/script.js'
+    '/js/app.js',
+    '/js/functions.js',
+    '/js/variables.js'
 ]
+
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(cacheName)

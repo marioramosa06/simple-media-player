@@ -14,3 +14,4 @@ const playlistTrigger = document.querySelector(".playlist-trigger");
 const playlistContainer = document.querySelector(".playlist-container");
 // const playlistItems = document.querySelector(".playlist");
 let playlistClose = document.querySelector(".close-playlist")
+let volumeIcon = document.querySelector(".volume-icon-img")

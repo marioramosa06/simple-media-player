@@ -150,7 +150,7 @@ filePicker.addEventListener("change", function () {
     });
 
     // console.log(playlistItems);
-    playlistContainer.innerHTML = `<h3 class="playlist-title">Playlist :</h3>`
+    playlistContainer.innerHTML = `<h4 class="playlist-title">Playlist :</h4>`
     playlistContainer.innerHTML += `<button type="button" class="close-playlist">close</button>`;
     playlistContainer.append(playlistItems);
 

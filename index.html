@@ -7,7 +7,7 @@
   <title id="title">Video Player</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/fonts/remixicon.css" />
+  <!-- <link rel="stylesheet" href="css/fonts/remixicon.css" /> -->
 </head>
 
 <body>
@@ -15,15 +15,16 @@
     <div class="spinner"></div>
     <span>Loading...</span>
   </div>
-  <span class="file-name"> No video currently playing </span>
+  <span class="file-name"> No media currently playing </span>
 
-  <video src="" id="video" preload="auto" autoplay>
-
+  <video src="" id="video" preload="auto" autoplay poster="">
+    
   </video>
-  <div class="playlist-container hide">
-          <ul class="playlist">
-            <!-- <h5>Playlist :</h5> -->
-          </ul>
+  <div class="playlist-container remove">
+          <!-- <ul class="playlist">
+            <h3>Playlist :</h3>
+          </ul> -->
+          <!-- <button type="button" class="close-playlist">close</button> -->
         </div>
   <div class="controls">
 
@@ -39,7 +40,7 @@
         <label for="file" class="file-picker" title="Open files">
           <!-- <i class="ri-folder-open-fill"></i> -->
           <img src="/images/open.svg" alt="">
-          <input type="file" name="file" id="file" class="file-picker" style="display: none" accept="video/*"
+          <input type="file" name="file" id="file" class="file-picker" style="display: none" accept="video/*,audio/*"
             multiple />
         </label>
 

@@ -1,22 +1,46 @@
 {
-    "name" : "Mario Video Player",
-    "short_name" : "Video Player",
-    "start_url" : ".",
-    "background_color" : "#fae9ca",
-    "theme_color" : "#f5deb3",
-    "display" : "standalone",
-    "orientation" : "landscape",
-    "icons" : [
-        {
-            "src" : "images/logo192.jpg",
-            "sizes" : "192x192",
-            "type" : "images/jpeg"
-        },
-        {
-            "src" : "images/logo512.jpg",
-            "sizes" : "512x512",
-            "type" : "images/jpeg"
-        }
-    ]
-
+  "name": "Mario Player",
+  "short_name": "Simple Video Player",
+  "start_url": "/index.html",
+  "background_color": "#fae9ca",
+  "theme_color": "#f5deb3",
+  "display": "standalone",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "images/logo72.png",
+      "sizes": "72x72",
+      "type": "images/png"
+    },
+    {
+      "src": "images/logo96.png",
+      "sizes": "96x96",
+      "type": "images/png"
+    },
+    {
+      "src": "images/logo128.png",
+      "sizes": "128x128",
+      "type": "images/png"
+    },
+    {
+      "src": "images/logo144.png",
+      "sizes": "144x144",
+      "type": "images/png"
+    },
+    {
+      "src": "images/logo152.png",
+      "sizes": "152x152",
+      "type": "images/png"
+    },
+    {
+      "src": "images/logo192.png",
+      "sizes": "192x192",
+      "type": "images/png"
+    },
+    {
+      "src": "images/logo512.png",
+      "sizes": "512x512",
+      "type": "images/png"
+    }
+  ]
 }

@@ -1,3 +1,6 @@
+    :root {
+        --accent: wheat;
+    }
     * {
         padding: 0;
         margin: 0;
@@ -10,6 +13,22 @@
         width: 100vw;
         height: 100vh;
         overflow: hidden;
+    }
+   
+    .remove {
+        animation: remove linear .3s;
+        display: none;
+    }
+
+    @keyframes remove {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+            display: none;
+        }
     }
 
     .hide {
@@ -32,7 +51,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: wheat;
+        background-color: var(--accent);
         border-radius: 8px;
         width: auto;
         height: 30px;
@@ -70,18 +89,18 @@
 
     .file-name {
         position: absolute;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: fit-content;
+        top: 0;
+        left: 0;
+        /* transform: translateX(-50%); */
+        width: 100%;
         padding: 5px;
         font-size: medium;
         font-weight: bold;
         text-align: center;
-        background-color: rgba(255, 255, 255, 0.404);
+        background-color: rgb(255, 255, 255);
         color: rgb(0, 0, 0);
         /* backdrop-filter: blur(10px); */
-        border-radius: 4px;
+        /* border-radius: 4px; */
     }
 
     video {
@@ -99,7 +118,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        width: 50%;
+        width: 90%;
+        max-width: 500px;
         /* height: 30px; */
         background-color: rgb(255, 255, 255);
         color: rgb(0, 0, 0);
@@ -112,7 +132,7 @@
 
     .controls .time-slider {
         width: 100%;
-        height: 100%;
+        /* height: 100%; */
         padding: 5px 15px;
         display: flex;
         align-items: center;
@@ -122,18 +142,24 @@
     }
 
     .controls .time-slider .time {
-        width: 50px;
+        width: 58px;
         font-size: small;
         font-weight: bold;
         /* background-color: aqua; */
+        text-align: center;
+        /* background-color: var(--accent); */
+        /* border-bottom: 2px solid var(--accent); */
     }
 
     .controls .time-slider #time-elapsed {
         text-align: left;
+        margin-right: 10px;
+
     }
 
     .controls .time-slider #time-total {
         text-align: right;
+        margin-left: 10px;
     }
 
     .controls .time-slider .slider {
@@ -149,38 +175,24 @@
 
     .controls .time-slider #slider {
         -webkit-appearance: none;
-        /* Remove default appearance */
         appearance: none;
-        /* Remove default appearance */
         width: 100%;
-        /* Set the width */
         height: 8px;
-        /* Set the height */
         background-color: #dddddd;
-        /* Set the background color */
         border-radius: 5px;
-        /* Set the border radius */
         outline: none;
-        /* Remove the outline */
         cursor: pointer;
     }
 
     #slider::-webkit-slider-thumb {
         -webkit-appearance: none;
-        /* Remove default appearance */
         appearance: none;
-        /* Remove default appearance */
         width: 5px;
-        /* Set the width of the thumb */
         height: 8px;
-        /* Set the height of the thumb */
         background-color: #000000;
-        /* Set the background color of the thumb */
-        border-radius: 5px;
-        /* Make the thumb round */
+        /* border-radius: 5px; */
         cursor: pointer;
-        /* Change the cursor to a pointer */
-        box-shadow: -600px 0 1px 600px wheat;
+        box-shadow: -600px 0 1px 600px var(--accent);
     }
 
 
@@ -221,7 +233,7 @@
         width: 55px;
         height: 40px;
         border-radius: 40px;
-        background-color: rgb(255, 238, 205);
+        background-color: var(--accent);
         color: rgb(5, 5, 5);
         display: flex;
         align-items: center;
@@ -238,11 +250,11 @@
 
     .controls #play-btn-icon {
         margin-left: 4px;
-        /* width: .8rem; */
+        width: .8rem;
     }
 
     .control:hover {
-        background-color: rgb(247, 232, 205);
+        background-color: var(--accent);
         color: black;
     }
 
@@ -290,7 +302,7 @@
 
 
     .start *:hover {
-        background-color: antiquewhite;
+        background-color: var(--accent);
         cursor: pointer;
     }
 
@@ -300,11 +312,12 @@
 
     .playlist-container {
         position: absolute;
-        bottom: calc(120px);
-        left: 25%;
-        /* transform: translate(-50%,-50%); */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
         min-width: 250px;
-        width: 25%;
+        width: 50%;
+        max-width: 300px;
         min-height: 50px;
         /* height: auto; */
         height: 50vh;
@@ -321,6 +334,7 @@
         overflow-y: scroll;
         font-size: small;
         font-weight: bold;
+        padding-top: 25px;
     }
 
     .playlist .playlist-item {
@@ -336,11 +350,38 @@
 
     .playlist .playlist-item:hover {
         cursor: pointer;
-        background-color: wheat;
+        background-color: var(--accent);
     }
 
     .playlist .playlist-item:active {
         background-color: #dddddd;
+    }
+
+    .playlist-container .playlist-title {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding-left: 18px;
+        width: 100%;
+        height: 50px;
+        background-color: white;
+        display: flex;
+        align-items: center;
+    }
+
+    .playlist-container .close-playlist {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        height: 30px;
+        border: none;
+        background-color: var(--accent);
+        padding: 5px 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: small;
+        font-weight: bold;
+        /* border: 1px solid white; */
     }
 
     .end {

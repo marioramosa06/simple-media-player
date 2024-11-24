@@ -106,6 +106,18 @@ video.onpause = () => {
   playBtn.innerHTML = `<img src="/images/play.svg" id="play-btn-icon">`;
 };
 
+video.addEventListener("error", function() {
+  console.log("not supported, playing next file")
+  let fileErrorIndex = fileIndex
+  listItem = document.querySelectorAll(".playlist-item")
+  Array.from(listItem).forEach(e => {
+    if (e.id == fileErrorIndex) {
+      e.classList.add("playlist-item-error")
+    }
+  })
+  nextFile()
+})
+
 // serive worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

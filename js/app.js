@@ -53,6 +53,7 @@ controls.onmouseleave = (e) => {
 filePicker.onchange = () => {
     if (filePicker.files.length > 0) {
         playlist = filePicker.files
+        videoIndex = 0
         let playlistItems = document.createElement("ul")
         playlistItems.setAttribute("class", "playlist")
         Array.from(playlist).forEach((item, index) => {

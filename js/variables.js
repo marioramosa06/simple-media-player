@@ -1,5 +1,5 @@
 const filePicker = document.querySelector("#file");
-const video = document.querySelector("#video");
+const media = document.querySelector("#video");
 const controls = document.querySelector(".controls");
 const playBtn = document.querySelector("#play-btn");
 const playBtnIcon = document.querySelector("#play-btn-icon");

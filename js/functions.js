@@ -1,8 +1,8 @@
 changePlayState = () => {
-    if (video.paused) {
-        video.play();
+    if (media.paused) {
+        media.play();
     } else {
-        video.pause();
+        media.pause();
     }
 };
 
@@ -18,27 +18,27 @@ pickFiles = (fileinput) => {
         filelist = fileinput.files;
         fileIndex = 0;
         createPlaylist(filelist);
-        loadVideo();
+        loadFile();
     }
 };
 
-loadVideo = () => {
+loadFile = () => {
     loader.classList.remove("hide");
     let file = new FileReader();
     file.readAsDataURL(filelist[fileIndex]);
     file.onload = () => {
-        video.setAttribute("src", file.result);
+        media.setAttribute("src", file.result);
     };
     let videoDuration = 0;
-    video.onloadedmetadata = () => {
-        videoDuration = video.duration;
+    media.onloadedmetadata = () => {
+        videoDuration = media.duration;
         totalTime.innerText = timeFormat(videoDuration);
         slider.max = Math.floor(videoDuration);
-        videoW = video.videoWidth;
-        videoH = video.videoHeight;
+        videoW = media.videoWidth;
+        videoH = media.videoHeight;
     };
 
-    video.oncanplay = () => {
+    media.oncanplay = () => {
         loader.classList.add("hide");
         let name = filelist[fileIndex].name;
 
@@ -55,11 +55,11 @@ loadVideo = () => {
             }
         });
         window.setInterval(function () {
-            slider.value = Math.floor(video.currentTime);
-            totalTime.innerText = timeFormat(video.duration - video.currentTime);
+            slider.value = Math.floor(media.currentTime);
+            totalTime.innerText = timeFormat(media.duration - media.currentTime);
 
-            elapsedTime.innerText = timeFormat(video.currentTime);
-            if (video.ended) {
+            elapsedTime.innerText = timeFormat(media.currentTime);
+            if (media.ended) {
                 nextFile();
             }
         }, 1000);
@@ -89,7 +89,7 @@ createPlaylist = (filelist) => {
         e.onclick = () => {
             playlistContainer.classList.add("remove");
             fileIndex = parseInt(e.id);
-            loadVideo();
+            loadFile();
         };
     });
 };
@@ -97,50 +97,50 @@ createPlaylist = (filelist) => {
 prevFile = () => {
     if (fileIndex > 0) {
         fileIndex--;
-        loadVideo();
+        loadFile();
     }
 };
 
 nextFile = () => {
     if (fileIndex < filelist.length - 1) {
         fileIndex++;
-        loadVideo();
+        loadFile();
     }
 };
 
 rewind = (n) => {
-    if (video.currentTime > n) {
-        video.currentTime = video.currentTime - n;
+    if (media.currentTime > n) {
+        media.currentTime = media.currentTime - n;
     }
 };
 forward = (n) => {
-    if (video.currentTime < video.duration - n) {
-        video.currentTime = video.currentTime + n;
+    if (media.currentTime < media.duration - n) {
+        media.currentTime = media.currentTime + n;
     }
 };
 volumeUp = (n) => {
-    if (video.volume + n / 100 <= 1) {
-        video.volume += n / 100;
+    if (media.volume + n / 100 <= 1) {
+        media.volume += n / 100;
     }
-    volume.value = video.volume * 100;
+    volume.value = media.volume * 100;
 };
 
 volumeDown = (n) => {
-    if (video.volume - n / 100 >= 0) {
-        video.volume -= n / 100;
+    if (media.volume - n / 100 >= 0) {
+        media.volume -= n / 100;
     }
-    volume.value = video.volume * 100;
+    volume.value = media.volume * 100;
 };
 
 muteVolume = () => {
-    if (!video.muted) {
-        video.muted = true;
+    if (!media.muted) {
+        media.muted = true;
         volumeIcon.classList.remove("ri-volume-up-fill");
         volumeIcon.classList.add("ri-volume-mute-fill");
         volume.disabled = true;
         volume.style.cursor = "not-allowed";
     } else {
-        video.muted = false;
+        media.muted = false;
         volumeIcon.classList.remove("ri-volume-mute-fill");
         volumeIcon.classList.add("ri-volume-up-fill");
         volume.disabled = false;

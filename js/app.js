@@ -3,7 +3,7 @@ playlistClose.onclick = () => {
 };
 
 volume.onchange = () => {
-  video.volume = volume.value / 100;
+  media.volume = volume.value / 100;
   document
     .querySelector(".volume-slider")
     .setAttribute("title", `${volume.value}%`);
@@ -14,7 +14,7 @@ volumeIcon.onclick = () => {
 };
 
 window.onkeydown = (e) => {
-  e.preventDefault;
+  e.preventDefault();
   if (e.code == "Space") {
     changePlayState();
   }
@@ -82,22 +82,22 @@ nextBtn.onclick = () => {
 };
 
 slider.onchange = () => {
-  video.currentTime = slider.value;
+  media.currentTime = slider.value;
 };
 
 slider.oninput = () => {
-  video.currentTime = slider.value;
+  media.currentTime = slider.value;
 };
 
-video.onplay = () => {
+media.onplay = () => {
   playBtn.innerHTML = `<i class="ri-pause-fill"></i>`;
 };
 
-video.onpause = () => {
+media.onpause = () => {
   playBtn.innerHTML = `<i class="ri-play-fill" id="play-btn-icon"></i>`;
 };
 
-video.addEventListener("error", function () {
+media.addEventListener("error", function () {
   console.log("not supported, playing next file");
   let fileErrorIndex = fileIndex;
   listItem = document.querySelectorAll(".playlist-item");
@@ -113,7 +113,7 @@ video.addEventListener("error", function () {
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/sw.js")
+      .register("./sw.js")
       .then((registration) => {
         console.log("Service Worker registered:", registration);
       })

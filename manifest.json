@@ -4,8 +4,8 @@
   "description" : "simple js media player using fileReader API",
   "id": "mrmediaplayer",
   "start_url": "/index.html",
-  "background_color": "#fae9ca",
-  "theme_color": "#f5deb3",
+  "background_color": "#eaebed",
+  "theme_color": "#ffe8d9",
   "display": "standalone",
   "orientation": "landscape",
   "icons": [

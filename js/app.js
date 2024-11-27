@@ -19,14 +19,10 @@ window.onkeydown = (e) => {
     changePlayState();
   }
   if (e.code == "ArrowLeft") {
-    if (video.currentTime > 5) {
-      video.currentTime = video.currentTime - 5;
-    }
+    rewind(20)
   }
   if (e.code == "ArrowRight") {
-    if (video.currentTime < video.duration - 5) {
-      video.currentTime = video.currentTime + 5;
-    }
+    forward(20)
   }
   if (e.code == "ArrowUp") {
     volumeUp(5);
@@ -43,7 +39,7 @@ window.onkeydown = (e) => {
   if (e.key == "M" || e.key == "m") {
     muteVolume();
   }
-}
+};
 
 let controlsVisivilityTimeOut = null;
 
@@ -66,12 +62,7 @@ controls.onmouseleave = (e) => {
 };
 
 filePicker.onchange = () => {
-  if (filePicker.files.length > 0) {
-    filelist = filePicker.files;
-    fileIndex = 0;
-    createPlaylist(filelist);
-    loadVideo();
-  }
+  pickFiles(filePicker)
 };
 
 playlistTrigger.onclick = () => {
@@ -99,24 +90,24 @@ slider.oninput = () => {
 };
 
 video.onplay = () => {
-  playBtn.innerHTML = `<img src="/images/pause.svg">`;
+  playBtn.innerHTML = `<i class="ri-pause-fill"></i>`;
 };
 
 video.onpause = () => {
-  playBtn.innerHTML = `<img src="/images/play.svg" id="play-btn-icon">`;
+  playBtn.innerHTML = `<i class="ri-play-fill" id="play-btn-icon"></i>`;
 };
 
-video.addEventListener("error", function() {
-  console.log("not supported, playing next file")
-  let fileErrorIndex = fileIndex
-  listItem = document.querySelectorAll(".playlist-item")
-  Array.from(listItem).forEach(e => {
+video.addEventListener("error", function () {
+  console.log("not supported, playing next file");
+  let fileErrorIndex = fileIndex;
+  listItem = document.querySelectorAll(".playlist-item");
+  Array.from(listItem).forEach((e) => {
     if (e.id == fileErrorIndex) {
-      e.classList.add("playlist-item-error")
+      e.classList.add("playlist-item-error");
     }
-  })
-  nextFile()
-})
+  });
+  nextFile();
+});
 
 // serive worker
 if ("serviceWorker" in navigator) {

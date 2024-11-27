@@ -1,90 +1,112 @@
 <!DOCTYPE html>
 <html lang="mg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="title">Mario Player</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="css/remixicon.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="title">Video Player</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="css/style.css" />
-  <!-- <link rel="stylesheet" href="css/fonts/remixicon.css" /> -->
-</head>
-
-<body>
-  <div class="loader hide">
-    <div class="spinner"></div>
-    <span>andraso kely ...</span>
-  </div>
-  <span class="file-name">  0 / 0 </span>
-
-  <video src="" id="video" preload="auto" autoplay>
-
-  </video>
-  <div class="playlist-container remove">
-    <div class="nolist">
-      <h4>Tsy misy</h4>
-      <h5>mifidiana hira aloha</h5>
+  <body>
+    <div class="loader hide">
+      <i class="ri-loader-4-fill spinner"></i>
+      <span> adiaso bitaka ...</span>
     </div>
-    <button type="button" class="close-playlist">hiala</button>
-  </div>
-  <div class="controls">
+    <span class="file-name">...</span>
 
-    <div class="time-slider">
-      <div class="time" id="time-elapsed">00:00</div>
-      <div class="slider">
-        <input type="range" id="slider" min="0" max="" value="0" />
-      </div>
-      <div class="time" id="time-total">00:00</div>
-    </div>
-    <div class="bottom-container">
-      <div class="bottom start">
-        <label for="file" class="file-picker" title="hifidy hira">
-          <!-- <i class="ri-folder-open-fill"></i> -->
-          <img src="/images/open.svg" alt="">
-          <input type="file" name="file" id="file" class="file-picker" style="display: none" accept="video/*,audio/*"
-            multiple />
+    <video src="" id="video" preload="auto" autoplay></video>
+    <div class="playlist-container remove">
+      <div class="nolist">
+        <span>mampidira raha alefa eky maloaka</span>
+        <label
+          for="file"
+          class="file-picker"
+          onclick="pickFiles()"
+          title="hampiditra"
+        >
+          <i class="ri-file-add-fill"></i>
+
+          <input
+            type="file"
+            id="filepicker-nolist"
+            class="file-picker"
+            style="display: none"
+            accept="video/*,audio/*"
+            multiple
+          />
         </label>
-
-        <div class="playlist-trigger" title="lisitry ny hira">
-          <img src="/images/list.svg" alt="">
-        </div>
-
-
       </div>
-
-
-
-      <div class="control-container">
-        <div class="control" id="prev-btn" title="teo aloha">
-          <!-- <i class="ri-skip-back-fill" id="prev-btn-icon"></i> -->
-          <img src="/images/prev.svg" alt="">
+      <button type="button" class="close-playlist">
+        <i class="ri-close-fill"></i>
+      </button>
+    </div>
+    <div class="controls">
+      <div class="progress">
+        <div class="time" id="time-elapsed">00:00</div>
+        <div class="progress-bar">
+          <input
+            type="range"
+            id="progress-bar-slider"
+            class="slider"
+            min="0"
+            max=""
+            value="0"
+          />
         </div>
-        <div class="control" id="play-btn" title="alefa / atsahatra">
-          <!-- <i class="ri-play-fill" id="play-btn-icon"></i> -->
-          <img id="play-btn-icon" src="/images/play.svg" alt="">
-        </div>
-        <div class="control" id="next-btn" title="manaraka">
-          <!-- <i class="ri-skip-forward-fill" id="next-btn-icon"></i> -->
-          <img src="/images/next.svg" alt="">
-        </div>
+        <div class="time" id="time-total">00:00</div>
       </div>
+      <div class="bottom-container">
+        <div class="bottom start">
+          <label for="file" class="file-picker" title="hampiditra">
+            <i class="ri-folder-add-fill"></i>
+            <input
+              type="file"
+              name="file"
+              id="file"
+              class="file-picker"
+              style="display: none"
+              accept="video/*,audio/*"
+              multiple
+            />
+          </label>
 
-      <div class="bottom end">
-        <div class="volume-icon">
-          <img class="volume-icon-img" src="/images/volume.svg" alt="">
+          <div class="playlist-trigger" title="lisitra">
+            <i class="ri-list-ordered-2"></i>
+          </div>
         </div>
-        <div class="volume-slider" title="100%">
-          <input type="range" id="volume" min="0" max="100" value="100">
 
+        <div class="control-container">
+          <div class="control" id="prev-btn" title="taloha">
+            <i class="ri-skip-back-fill" id="prev-btn-icon"></i>
+          </div>
+          <div class="control" id="play-btn" title="alefa/tapahina">
+            <i class="ri-play-fill" id="play-btn-icon"></i>
+          </div>
+          <div class="control" id="next-btn" title="magnaraka">
+            <i class="ri-skip-forward-fill" id="next-btn-icon"></i>
+          </div>
+        </div>
+        <div class="bottom end">
+          <div class="volume">
+            <i class="ri-volume-up-fill volume-icon"></i>
+          </div>
+          <div class="volume-slider" title="100%">
+            <input
+              type="range"
+              id="volume-slider"
+              class="slider"
+              min="0"
+              max="100"
+              value="100"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <script src="js/variables.js"></script>
-  <script src="js/functions.js"></script>
-  <script src="js/app.js"></script>
-
-
-</body>
-
+    <script src="js/variables.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/app.js"></script>
+  </body>
 </html>

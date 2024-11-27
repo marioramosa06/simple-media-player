@@ -9,7 +9,7 @@ Select Multiple Files: Choose multiple files to create a playlist.
 Usage
 
 1. Clone the Repository:
-git clone https://github.com/marioramosa06/simple-video-player.git
+git clone https://github.com/marioramosa06/simple-media-player.git
 
 2. Run : 
 Open the index.html file in your web browser.

@@ -9,8 +9,8 @@ changePlayState = () => {
 timeFormat = (t) => {
     const min = Math.floor(t / 60);
     const sec = Math.floor(t - min * 60);
-    // let time = `${min > 9 ? min : "0" + min} : ${sec > 9 ? sec : "0" + sec}`;
-    return `${min.padStart(2,'0')} : ${min.padStart(2,'0')}`
+    let time = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
+    return time;
 };
 
 pickFiles = (fileinput) => {

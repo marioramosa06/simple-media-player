@@ -6,6 +6,7 @@ const assets = [
     "/css/style.css",
     "/css/remixicon.css",
     "/css/remixicon.woff2",
+	"/css/remixicon.woff2?t=1729600608771",
     "/images/icons/icon-72x72.png",
     "/images/icons/icon-96x96.png",
     "/images/icons/icon-128x128.png",

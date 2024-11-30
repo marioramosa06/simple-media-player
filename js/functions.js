@@ -27,37 +27,18 @@ loadFile = () => {
   const currentFile = filelist[fileIndex];
   let fileReader = new FileReader();
 
-  fileReader.readAsDataURL(currentFile);
-  fileReader.onload = () => {
-    media.src = fileReader.result;
+  // fileReader.readAsDataURL(currentFile);
+  // fileReader.onload = () => {
+  //   media.src = fileReader.result;
+  // };
+
+  fileReader.readAsArrayBuffer(currentFile);
+  fileReader.onload = (e) => {
+    let buffer = e.target.result;
+    let mediaBlob = new Blob([new Uint8Array(buffer)], { type: "video/mp4" });
+    let url = window.URL.createObjectURL(mediaBlob);
+    media.src = url;
   };
-
-  //   const chunksNumber = 5;
-
-  //   media.src = media.webkitMediaSourceURL;
-
-  //   media.addEventListener(
-  //     "webkitsourceopen",
-  //     function (e) {
-  //       let chunkSize = Math.ceil(currentFile.size / chunksNumber);
-  //       for (let i = 0; i < chunksNumber; i++) {
-  //         let startByte = chunkSize * i;
-  //         let chunk = currentFile.slice(startByte, startByte + chunkSize);
-  //         let fileReader = new FileReader();
-  //         fileReader.onload = (function (idx) {
-  //           return (e) => {
-  //             media.webkitSourceAppend(new Uint8Array(e.target.result));
-  //             logger.log("appending chinck : " + idx);
-  //             if (idx == chunksNumber - 1) {
-  //               media.webkitSourceEndOfStream(HTMLMediaElement.EOS_NO_ERROR);
-  //             }
-  //           };
-  //         })(i);
-  //         fileReader.readAsArrayBuffer(chunk);
-  //       }
-  //     },
-  //     false
-  //   );
 
   let videoDuration = 0;
   media.onloadedmetadata = () => {
@@ -82,13 +63,13 @@ loadFile = () => {
         }
       }
     });
-    window.setInterval(function () {
+    playerInterval = window.setInterval(function () {
       slider.value = Math.floor(media.currentTime);
       totalTime.innerText = timeFormat(media.duration - media.currentTime);
-
       elapsedTime.innerText = timeFormat(media.currentTime);
-      if (media.ended) {
+      if (media.currentTime === media.duration) {
         nextFile();
+        window.clearInterval(playerInterval);
       }
     }, 1000);
   };
@@ -126,12 +107,18 @@ prevFile = () => {
   if (fileIndex > 0) {
     fileIndex--;
     loadFile();
+  } else {
+    fileIndex = filelist.length - 1;
+    loadFile();
   }
 };
 
 nextFile = () => {
   if (fileIndex < filelist.length - 1) {
     fileIndex++;
+    loadFile();
+  } else {
+    fileIndex = 0;
     loadFile();
   }
 };

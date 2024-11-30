@@ -7,7 +7,7 @@
         --secondary: #ff8496;
         --secondary-dimmed: #ff93a3;
         --text: #1f1f1f;
-        --shadow: 0 0 1px 1px #cccccc;
+        --shadow: 0 0 5px 1px #cccccc;
     }
 }
 
@@ -20,7 +20,7 @@
         --secondary: #a75561;
         --secondary-dimmed: #c2616f8a;
         --text: #f0f0f0;
-        --shadow: 0 0 1px 1px #7c7c7c;
+        --shadow: 0 0 5px 1px #7c7c7c;
     }
 }
 
@@ -40,7 +40,7 @@ body {
 }
 
 .remove {
-    animation: remove linear .5s;
+    animation: remove ease-in-out .5s;
     display: none;
 }
 
@@ -56,7 +56,7 @@ body {
 }
 
 .hide {
-    animation: hide linear .3s;
+    animation: hide ease-in-out .2s;
     opacity: 0;
 }
 
@@ -83,11 +83,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    z-index: 2;
+    box-shadow: var(--shadow);
 }
 
 .loader .spinner {
     color: var(--text);
-    animation: rotate 1s linear infinite;
+    animation: rotate 1s ease-in-out infinite;
 }
 
 .loader span {
@@ -305,7 +307,7 @@ video {
 }
 
 .playlist-container-grow {
-    animation: grow .3s linear;
+    animation: grow .2s ease-in-out;
 }
 
 @keyframes grow {

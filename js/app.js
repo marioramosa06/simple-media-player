@@ -70,10 +70,6 @@ window.onload = () => {
   };
 };
 
-window.addEventListener("appearance-change", function (e) {
-  console.log(e);
-});
-
 filePicker.onchange = () => {
   pickFiles(filePicker);
 };
@@ -95,11 +91,10 @@ nextBtn.onclick = () => {
 };
 
 slider.onchange = () => {
-  media.currentTime = slider.value;
-};
-
-slider.oninput = () => {
-  media.currentTime = slider.value;
+  media.currentTime = slider.value;  
+  if (media.currentTime === media.duration) {
+    nextFile()
+  }
 };
 
 media.onplay = () => {

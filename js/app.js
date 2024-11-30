@@ -13,56 +13,61 @@ volumeIcon.onclick = () => {
   muteVolume();
 };
 
-window.onkeydown = (e) => {
-  e.preventDefault();
-  if (e.code == "Space") {
-    changePlayState();
-  }
-  if (e.code == "ArrowLeft") {
-    rewind(20)
-  }
-  if (e.code == "ArrowRight") {
-    forward(20)
-  }
-  if (e.code == "ArrowUp") {
-    volumeUp(5);
-  }
-  if (e.code == "ArrowDown") {
-    volumeDown(5);
-  }
-  if (e.key == "P" || e.key == "p") {
-    prevFile();
-  }
-  if (e.key == "N" || e.key == "n") {
-    nextFile();
-  }
-  if (e.key == "M" || e.key == "m") {
-    muteVolume();
-  }
+window.onload = () => {
+  window.onkeydown = (e) => {
+    // e.preventDefault();
+    if (e.code == "Space") {
+      changePlayState();
+    }
+    if (e.code == "ArrowLeft") {
+      rewind(10);
+    }
+    if (e.code == "ArrowRight") {
+      forward(10);
+    }
+    if (e.code == "ArrowUp") {
+      volumeUp(5);
+    }
+    if (e.code == "ArrowDown") {
+      volumeDown(5);
+    }
+    if (e.key == "P" || e.key == "p") {
+      prevFile();
+    }
+    if (e.key == "N" || e.key == "n") {
+      nextFile();
+    }
+    if (e.key == "M" || e.key == "m") {
+      muteVolume();
+    }
+  };
+
+  let timeOut = undefined;
+  controls.onmouseenter = (e) => {
+    if (timeOut !== undefined) {
+      window.clearTimeout(timeOut);
+    }
+    if (controls.classList.contains("hide")) {
+      controls.classList.remove("hide");
+      fileName.classList.remove("hide");
+    }
+  };
+
+  controls.onmouseleave = (e) => {
+    timeOut = window.setTimeout(() => {
+      controls.classList.add("hide");
+      fileName.classList.add("hide");
+      window.clearTimeout(timeOut);
+    }, 1000);
+  };
 };
 
-let controlsVisivilityTimeOut = null;
-
-controls.onmouseenter = (e) => {
-  if (controlsVisivilityTimeOut !== null) {
-    window.clearTimeout(controlsVisivilityTimeOut);
-  }
-  if (controls.classList.contains("hide")) {
-    controls.classList.remove("hide");
-    fileName.classList.remove("hide");
-  }
-};
-
-controls.onmouseleave = (e) => {
-  controlsVisivilityTimeOut = window.setTimeout(() => {
-    controls.classList.add("hide");
-    fileName.classList.add("hide");
-    controlsVisivilityTimeOut = null;
-  }, 3000);
-};
+window.addEventListener("appearance-change", function (e) {
+  console.log(e);
+});
 
 filePicker.onchange = () => {
-  pickFiles(filePicker)
+  pickFiles(filePicker);
 };
 
 playlistTrigger.onclick = () => {
@@ -109,7 +114,7 @@ media.addEventListener("error", function () {
   nextFile();
 });
 
-// serive worker
+// service worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker

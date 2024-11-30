@@ -1,13 +1,12 @@
 {
+  "id": "mario.mediaplayer.pwa",
   "name": "Mario Player",
-  "short_name": "MarioPlayer",
-  "description" : "simple js media player using fileReader API",
-  "id": "mrmediaplayer",
+  "short_name": "Mario Player",
+  "description" : "simple js media player using FileReader API",
   "start_url": "./index.html",
-  "background_color": "#eaebed",
-  "theme_color": "#ffc9a5",
+  
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "landscape",
   "icons": [
     {
       "src": "./images/icons/icon-72x72.png",

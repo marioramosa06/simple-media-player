@@ -50,6 +50,9 @@ window.onload = () => {
     if (controls.classList.contains("hide")) {
       controls.classList.remove("hide");
       fileName.classList.remove("hide");
+      playlistContainer.classList.remove("playlist-container-grow")
+        playlistContainer.style.height = "calc(100vh - 155px)";
+        playlistContainer.style.bottom = "115px"
     }
   };
 
@@ -57,6 +60,11 @@ window.onload = () => {
     timeOut = window.setTimeout(() => {
       controls.classList.add("hide");
       fileName.classList.add("hide");
+      playlistContainer.classList.add("playlist-container-grow")
+
+        playlistContainer.style.height = "calc(100vh - 40px)";
+        playlistContainer.style.bottom = "20px"
+
       window.clearTimeout(timeOut);
     }, 1000);
   };

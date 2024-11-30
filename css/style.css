@@ -7,7 +7,7 @@
         --secondary: #ff8496;
         --secondary-dimmed: #ff93a3;
         --text: #1f1f1f;
-        --shadow: 0 0 1px 1px #e9e9e9;
+        --shadow: 0 0 1px 1px #cccccc;
     }
 }
 
@@ -56,7 +56,7 @@ body {
 }
 
 .hide {
-    animation: hide linear .5s;
+    animation: hide linear .3s;
     opacity: 0;
 }
 
@@ -140,6 +140,7 @@ video {
     max-width: 500px;
     background-color: var(--backgroud);
     color: var(--text);
+    box-shadow: var(--shadow);
     border-radius: 15px;
     padding: 5px 10px;
     z-index: 1;
@@ -290,7 +291,7 @@ video {
     left: 50%;
     bottom: 115px;
     transform: translateX(-50%);
-    min-width: 280px;
+    min-width: 380px;
     width: 70%;
     max-width: 420px;
     min-height: 300px;
@@ -301,6 +302,21 @@ video {
     padding: 10px;
     border-radius: 10px;
     z-index: 1;
+}
+
+.playlist-container-grow {
+    animation: grow .3s linear;
+}
+
+@keyframes grow {
+    0% {
+        height: calc(100vh - 155px);
+        bottom: 115px
+    }
+    100% {
+        height: calc(100vh - 40px);
+        bottom: 20px
+    }
 }
 
 .playlist-container .playlist {
@@ -342,19 +358,6 @@ video {
 .playlist .playlist-item-error:hover {
     cursor: not-allowed;
     background-color: var(--backgroud-dimmed);
-}
-
-.playlist .playlist-item-error::before {
-    content: "tsy zaka";
-    background-color: brown;
-    color: var(--backgroud);
-    color: var(--text);
-    padding: 5px 8px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 5px;
 }
 
 .playlist .playlist-item-playing {

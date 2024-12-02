@@ -6,11 +6,19 @@ changePlayState = () => {
   }
 };
 
-timeFormat = (t) => {
-  const min = Math.floor(t / 60);
-  const sec = Math.floor(t - min * 60);
-  let time = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
-  return time;
+timeFormat = (timeInSecond) => {
+  const hour = Math.floor(timeInSecond / 3600);
+  const min = Math.floor((timeInSecond - hour * 3600) / 60);
+  const sec = Math.floor(timeInSecond - hour * 3600 - min * 60);
+  let timeFormated = "";
+  if (hour < 1) {
+    timeFormated = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
+  } else {
+    timeFormated = `${hour > 9 ? hour : "0" + hour}:${
+      min > 9 ? min : "0" + min
+    }:${sec > 9 ? sec : "0" + sec}`;
+  }
+  return timeFormated;
 };
 
 pickFiles = (fileinput) => {
@@ -34,25 +42,19 @@ loadFile = () => {
 
   fileReader.readAsArrayBuffer(currentFile);
   fileReader.onload = (e) => {
-    let buffer = e.target.result;
-    let mediaBlob = new Blob([new Uint8Array(buffer)], { type: "video/mp4" });
-    let url = window.URL.createObjectURL(mediaBlob);
-    media.src = url;
+    let mediaBlob = new Blob([new Uint8Array(e.target.result)]);
+    media.src = window.URL.createObjectURL(mediaBlob);
   };
 
-  let videoDuration = 0;
   media.onloadedmetadata = () => {
-    videoDuration = media.duration;
-    totalTime.innerText = timeFormat(videoDuration);
-    slider.max = Math.floor(videoDuration);
+    totalTime.innerText = timeFormat(media.duration);
+    slider.max = Math.floor(media.duration);
   };
 
   media.oncanplay = () => {
     loader.classList.add("hide");
-    const name = currentFile.name;
-
-    document.title = name;
-    fileName.innerHTML = `${fileIndex + 1} - ${name}`;
+    document.title = currentFile.name;
+    fileName.innerHTML = `${fileIndex + 1} - ${currentFile.name}`;
 
     Array.from(listItem).forEach((e) => {
       if (e.id == fileIndex) {
@@ -67,10 +69,6 @@ loadFile = () => {
       slider.value = Math.floor(media.currentTime);
       totalTime.innerText = timeFormat(media.duration - media.currentTime);
       elapsedTime.innerText = timeFormat(media.currentTime);
-      if (media.currentTime === media.duration) {
-        nextFile();
-        window.clearInterval(playerInterval);
-      }
     }, 1000);
   };
 };
@@ -103,7 +101,14 @@ createPlaylist = (filelist) => {
   });
 };
 
+clearPlayerInterval = () => {
+  if (typeof playerInterval !== "undefined") {
+    window.clearInterval(playerInterval);
+  }
+};
+
 prevFile = () => {
+  clearPlayerInterval();
   if (fileIndex > 0) {
     fileIndex--;
     loadFile();
@@ -114,6 +119,7 @@ prevFile = () => {
 };
 
 nextFile = () => {
+  clearPlayerInterval();
   if (fileIndex < filelist.length - 1) {
     fileIndex++;
     loadFile();

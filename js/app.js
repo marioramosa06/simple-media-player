@@ -2,7 +2,7 @@ playlistClose.onclick = () => {
   playlistContainer.classList.add("remove");
 };
 
-volume.onchange = () => {
+volume.oninput = () => {
   media.volume = volume.value / 100;
   document
     .querySelector(".volume-slider")
@@ -50,9 +50,9 @@ window.onload = () => {
     if (controls.classList.contains("hide")) {
       controls.classList.remove("hide");
       fileName.classList.remove("hide");
-      playlistContainer.classList.remove("playlist-container-grow")
-        playlistContainer.style.height = "calc(100vh - 155px)";
-        playlistContainer.style.bottom = "115px"
+      playlistContainer.classList.remove("playlist-container-grow");
+      playlistContainer.style.height = "calc(100vh - 145px)";
+      playlistContainer.style.bottom = "105px";
     }
   };
 
@@ -60,13 +60,13 @@ window.onload = () => {
     timeOut = window.setTimeout(() => {
       controls.classList.add("hide");
       fileName.classList.add("hide");
-      playlistContainer.classList.add("playlist-container-grow")
+      playlistContainer.classList.add("playlist-container-grow");
 
-        playlistContainer.style.height = "calc(100vh - 40px)";
-        playlistContainer.style.bottom = "20px"
+      playlistContainer.style.height = "calc(100vh - 40px)";
+      playlistContainer.style.bottom = "20px";
 
       window.clearTimeout(timeOut);
-    }, 1000);
+    }, 3000);
   };
 };
 
@@ -90,11 +90,11 @@ nextBtn.onclick = () => {
   nextFile();
 };
 
-slider.onchange = () => {
-  media.currentTime = slider.value;  
-  if (media.currentTime === media.duration) {
-    nextFile()
+slider.oninput = () => {
+  if (typeof(playerInterval) !== "undefined") {
+    window.clearInterval(playerInterval)
   }
+  media.currentTime = slider.value;
 };
 
 media.onplay = () => {
@@ -102,7 +102,7 @@ media.onplay = () => {
 };
 
 media.onpause = () => {
-  playBtn.innerHTML = `<i class="ri-play-fill" id="play-btn-icon"></i>`;
+  playBtn.innerHTML = `<i class="ri-play-fill" id="play-btn-icon"></i>`
 };
 
 media.addEventListener("error", function () {
@@ -114,6 +114,11 @@ media.addEventListener("error", function () {
       e.classList.add("playlist-item-error");
     }
   });
+  nextFile();
+});
+
+media.addEventListener("ended", function (e) {
+  console.log("ended", e);
   nextFile();
 });
 

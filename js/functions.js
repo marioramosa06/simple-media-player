@@ -14,9 +14,8 @@ timeFormat = (timeInSecond) => {
   if (hour < 1) {
     timeFormated = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
   } else {
-    timeFormated = `${hour > 9 ? hour : "0" + hour}:${
-      min > 9 ? min : "0" + min
-    }:${sec > 9 ? sec : "0" + sec}`;
+    timeFormated = `${hour > 9 ? hour : "0" + hour}:${min > 9 ? min : "0" + min
+      }:${sec > 9 ? sec : "0" + sec}`;
   }
   return timeFormated;
 };
@@ -24,6 +23,7 @@ timeFormat = (timeInSecond) => {
 pickFiles = (fileinput) => {
   if (fileinput.files.length > 0) {
     filelist = fileinput.files;
+
     fileIndex = 0;
     createPlaylist(filelist);
     loadFile();
@@ -34,11 +34,6 @@ loadFile = () => {
   loader.classList.remove("hide");
   const currentFile = filelist[fileIndex];
   let fileReader = new FileReader();
-
-  // fileReader.readAsDataURL(currentFile);
-  // fileReader.onload = () => {
-  //   media.src = fileReader.result;
-  // };
 
   fileReader.readAsArrayBuffer(currentFile);
   fileReader.onload = (e) => {
@@ -84,13 +79,14 @@ createPlaylist = (filelist) => {
     playlistItems.append(li);
   });
   playlistContainer.innerHTML = `<button type="button" class="close-playlist">
-        <i class="ri-close-fill" ></i>
-    </button>`;
+      <i class="ri-close-fill" ></i>
+  </button>`;
   playlistContainer.append(playlistItems);
   playlistClose = document.querySelector(".close-playlist");
   playlistClose.onclick = () => {
     playlistContainer.classList.add("remove");
   };
+
   listItem = document.querySelectorAll(".playlist-item");
   Array.from(listItem).map((e) => {
     e.onclick = () => {
@@ -120,6 +116,7 @@ prevFile = () => {
 
 nextFile = () => {
   clearPlayerInterval();
+
   if (fileIndex < filelist.length - 1) {
     fileIndex++;
     loadFile();
@@ -127,6 +124,34 @@ nextFile = () => {
     fileIndex = 0;
     loadFile();
   }
+};
+
+shufflePlaylist = (arr) => {
+  let shuffled = [];
+  while (arr.length > shuffled.length) {
+    shuffled.push(arr[Math.floor(Math.random() * arr.length)]);
+  }
+  return shuffled;
+};
+
+toggleShuffle = () => {
+  if (!shuffle) {
+    shuffle = true;
+    shuffleBtn.style.backgroundColor = "var(--primary)";
+    if (filelist.length >= 3) {
+      filelist = shufflePlaylist(filelist);
+      createPlaylist(filelist);
+    }
+    console.log("shuffle: on");
+  } else {
+    shuffle = false;
+    shuffleBtn.style.backgroundColor = "var(--background)";
+    console.log("shuffle: off");
+  }
+};
+
+toggleRepeat = () => {
+  console.log("toggle repeat");
 };
 
 rewind = (n) => {

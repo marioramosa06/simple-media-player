@@ -22,7 +22,7 @@
     <div class="nolist">
       <span>mampidira raha alefa eky maloaka</span>
       <label for="file" class="file-picker" onchange="pickFiles()" title="hampiditra">
-        <i class="ri-add-fill"></i>
+        <i class="ri-folder-5-fill"></i>
 
         <input type="file" id="filepicker-nolist" class="file-picker" style="display: none" accept="video/*,audio/*"
           multiple />
@@ -45,7 +45,7 @@
     <div class="bottom-container">
       <div class="bottom start">
         <label for="file" class="file-picker" title="hampiditra">
-          <i class="ri-add-box-fill"></i>
+          <i class="ri-folder-5-fill"></i>
           <input type="file" name="file" id="file" class="file-picker" style="display: none" accept="video/*,audio/*"
             multiple />
         </label>
@@ -53,9 +53,13 @@
         <div class="playlist-trigger" title="lisitra">
           <i class="ri-list-check-2"></i>
         </div>
+
       </div>
 
       <div class="control-container">
+        <div class="control" id="repeat-btn" onclick="toggleRepeat()" title="Aerigna">
+          <i class="ri-loop-left-fill" id="reapeat-btn-icon"></i>
+        </div>
         <div class="control" id="prev-btn" title="taloha">
           <i class="ri-skip-back-fill" id="prev-btn-icon"></i>
         </div>
@@ -65,7 +69,11 @@
         <div class="control" id="next-btn" title="magnaraka">
           <i class="ri-skip-forward-fill" id="next-btn-icon"></i>
         </div>
+        <div class="control" id="shuffle-btn" onclick="toggleShuffle()" title="Afangaro">
+          <i class="ri-shuffle-fill" id="shuffle-btn-icon"></i>
+        </div>
       </div>
+
       <div class="bottom end">
         <div class="volume">
           <i class="ri-volume-up-fill volume-icon"></i>

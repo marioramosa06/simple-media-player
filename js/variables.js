@@ -12,8 +12,12 @@ const fileName = document.querySelector(".file-name");
 const loader = document.querySelector(".loader");
 const playlistTrigger = document.querySelector(".playlist-trigger");
 const playlistContainer = document.querySelector(".playlist-container");
-let playlistClose = document.querySelector(".close-playlist")
-let volume = document.querySelector("#volume-slider")
-let volumeIcon = document.querySelector(".volume-icon")
-let filelist = []
-let fileIndex = 0
+let playlistClose = document.querySelector(".close-playlist");
+let volume = document.querySelector("#volume-slider");
+let volumeIcon = document.querySelector(".volume-icon");
+const shuffleBtn = document.querySelector("#shuffle-btn");
+
+let filelist = [];
+let fileIndex = 0;
+let shuffle = false;
+let repeat = false;

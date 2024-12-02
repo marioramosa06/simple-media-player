@@ -99,7 +99,6 @@ body {
   align-items: center;
   justify-content: space-evenly;
   z-index: 2;
-  box-shadow: 0 0 2px 100vh rgba(0, 0, 0, 0.637);
 }
 
 .loader .spinner {
@@ -252,17 +251,29 @@ video {
   font-size: larger;
 }
 
+.controls #shuffle-btn,
+.controls #repeat-btn {
+  width: 30px;
+  height: 25px;
+  padding: 2px;
+  font-size: medium;
+}
+
+.controls #shuffle-btn {
+  margin-left: 5px;
+}
+
+.controls #repeat-btn {
+  margin-right: 5px;
+}
+
 .control:hover {
   background-color: var(--primary);
 }
 
-.control:active {
-  background-color: var(--backgroud);
-}
-
 .bottom-container {
   width: 100%;
-  padding: 0 10px;
+  padding: 0 10px 0 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -283,16 +294,31 @@ video {
 
 .start {
   justify-content: flex-start;
-  gap: 20px;
+  gap: 10px;
+}
+
+
+
+.start .file-picker,
+.start .playlist-trigger {
+  width: 25px;
+  /* height: 25px; */
+  padding: 2px;
+  border-radius: 10px;
+  /* border: 1px solid var(--text); */
+  cursor: pointer;
+  color: var(--text);
+  /* font-size: x-small; */
+  text-align: center;
+}
+
+.start .file-picker:hover,
+.start .playlist-trigger:hover {
+  background-color: var(--primary);
 }
 
 .end {
   justify-content: flex-end;
-}
-
-.start *:hover {
-  cursor: pointer;
-  color: var(--text-dimmed);
 }
 
 .end .volume-icon {
@@ -306,7 +332,7 @@ video {
 
 .end .volume-slider {
   width: 70px;
-  /* padding-right: 10px; */
+  display: flex;
 }
 
 .volume-slider input {

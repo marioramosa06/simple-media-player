@@ -74,6 +74,38 @@ loadFile = () => {
   };
 };
 
+showPlaylist = () => {
+  playlistContainer.style.display = "block";
+  playlistContainer.classList.add("show");
+  playlistContainer.classList.remove("hide");
+}
+
+hidePlaylist = () => {
+  playlistContainer.classList.remove("show");
+  playlistContainer.classList.add("hide");
+  playlistContainer.style.display = "none";
+}
+
+showControls = () => {
+  controls.classList.remove("hide");
+  fileName.classList.remove("hide");
+  controls.classList.add("show");
+  fileName.classList.add("show");
+  playlistContainer.classList.remove("playlist-container-grow");
+  playlistContainer.style.height = "calc(100vh - 145px)";
+  playlistContainer.style.bottom = "105px";
+}
+
+hideControls = () => {
+  controls.classList.remove("show");
+  fileName.classList.remove("show");
+  controls.classList.add("hide");
+  fileName.classList.add("hide");
+  playlistContainer.classList.add("playlist-container-grow");
+  playlistContainer.style.height = "calc(100vh - 40px)";
+  playlistContainer.style.bottom = "20px";
+}
+
 changePlayState = () => {
   if (media.paused) {
     media.play();

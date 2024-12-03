@@ -55,7 +55,7 @@ body {
 }
 
 .remove {
-  animation: remove ease-in-out 0.5s;
+  animation: remove linear 0.5s;
   display: none;
 }
 
@@ -71,7 +71,7 @@ body {
 }
 
 .hide {
-  animation: hide ease-in-out 0.2s;
+  animation: hide linear 0.3s;
   opacity: 0;
 }
 
@@ -82,6 +82,21 @@ body {
 
   100% {
     opacity: 0;
+  }
+}
+
+.show {
+  animation: show linear 0.3s;
+  opacity: 1;
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 
@@ -357,7 +372,7 @@ video {
 }
 
 .playlist-container-grow {
-  animation: grow 0.2s ease-in-out;
+  animation: grow 0.3s linear;
 }
 
 @keyframes grow {

@@ -1,5 +1,5 @@
 playlistClose.onclick = () => {
-  playlistContainer.classList.add("remove");
+  hidePlaylist()
 };
 
 volume.oninput = () => {
@@ -13,69 +13,67 @@ volumeIcon.onclick = () => {
   muteVolume();
 };
 
-window.onload = () => {
-  window.onkeydown = (e) => {
-    // e.preventDefault();
-    if (e.code == "Space") {
-      changePlayState();
-    }
-    if (e.code == "ArrowLeft") {
-      rewind(10);
-    }
-    if (e.code == "ArrowRight") {
-      forward(10);
-    }
-    if (e.code == "ArrowUp") {
-      volumeUp(5);
-    }
-    if (e.code == "ArrowDown") {
-      volumeDown(5);
-    }
-    if (e.key == "P" || e.key == "p") {
-      prevFile();
-    }
-    if (e.key == "N" || e.key == "n") {
-      nextFile();
-    }
-    if (e.key == "M" || e.key == "m") {
-      muteVolume();
-    }
-  };
+window.onkeydown = (e) => {
+  // e.preventDefault();
+  if (e.code == "Space") {
+    changePlayState();
+  }
+  if (e.code == "ArrowLeft") {
+    rewind(10);
+  }
+  if (e.code == "ArrowRight") {
+    forward(10);
+  }
+  if (e.code == "ArrowUp") {
+    volumeUp(5);
+  }
+  if (e.code == "ArrowDown") {
+    volumeDown(5);
+  }
+  if (e.key == "P" || e.key == "p") {
+    prevFile();
+  }
+  if (e.key == "N" || e.key == "n") {
+    nextFile();
+  }
+  if (e.key == "M" || e.key == "m") {
+    muteVolume();
+  }
+  if (e.key == "L" || e.key == "l") {
+    showPlaylist();
+  }
+  if (e.key == "Escape") {
+    hidePlaylist();
+  }
 
-  let timeOut = undefined;
-  controls.onmouseenter = (e) => {
-    if (timeOut !== undefined) {
-      window.clearTimeout(timeOut);
-    }
-    if (controls.classList.contains("hide")) {
-      controls.classList.remove("hide");
-      fileName.classList.remove("hide");
-      playlistContainer.classList.remove("playlist-container-grow");
-      playlistContainer.style.height = "calc(100vh - 145px)";
-      playlistContainer.style.bottom = "105px";
-    }
-  };
-
-  controls.onmouseleave = (e) => {
-    timeOut = window.setTimeout(() => {
-      controls.classList.add("hide");
-      fileName.classList.add("hide");
-      playlistContainer.classList.add("playlist-container-grow");
-
-      playlistContainer.style.height = "calc(100vh - 40px)";
-      playlistContainer.style.bottom = "20px";
-
-      window.clearTimeout(timeOut);
-    }, 3000);
-  };
 };
+
+let timeOut = undefined;
+controls.onmouseenter = (e) => {
+  if (timeOut !== undefined) {
+    window.clearTimeout(timeOut);
+  }
+  showControls()
+};
+
+controls.onmouseleave = (e) => {
+  timeOut = window.setTimeout(() => {
+    hideControls()
+    window.clearTimeout(timeOut);
+  }, 3000);
+};
+
 
 filePicker.onchange = () => {
   pickFiles(filePicker);
 };
 
 playlistTrigger.onclick = () => {
-  playlistContainer.classList.toggle("remove");
+  if (playlistContainer.classList.contains("hide")) {
+    showPlaylist()
+  } else {
+    hidePlaylist()
+  }
 };
 
 playBtn.onclick = () => {
@@ -91,7 +89,7 @@ nextBtn.onclick = () => {
 };
 
 slider.oninput = () => {
-  if (typeof(playerInterval) !== "undefined") {
+  if (typeof (playerInterval) !== "undefined") {
     window.clearInterval(playerInterval)
   }
   media.currentTime = slider.value;

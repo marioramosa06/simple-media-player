@@ -2,11 +2,11 @@
   "id": "mario.mediaplayer.pwa",
   "name": "Mario Player",
   "short_name": "Mario Player",
-  "description" : "simple js media player using FileReader API",
+  "description": "simple js media player using FileReader API",
   "start_url": "./index.html",
-  
+
   "display": "standalone",
-  "orientation": "landscape",
+  "orientation": "any",
   "icons": [
     {
       "src": "./images/icons/icon-72x72.png",

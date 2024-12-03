@@ -1,33 +1,39 @@
-changePlayState = () => {
-  if (media.paused) {
-    media.play();
-  } else {
-    media.pause();
-  }
-};
-
-timeFormat = (timeInSecond) => {
-  const hour = Math.floor(timeInSecond / 3600);
-  const min = Math.floor((timeInSecond - hour * 3600) / 60);
-  const sec = Math.floor(timeInSecond - hour * 3600 - min * 60);
-  let timeFormated = "";
-  if (hour < 1) {
-    timeFormated = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
-  } else {
-    timeFormated = `${hour > 9 ? hour : "0" + hour}:${min > 9 ? min : "0" + min
-      }:${sec > 9 ? sec : "0" + sec}`;
-  }
-  return timeFormated;
-};
-
 pickFiles = (fileinput) => {
   if (fileinput.files.length > 0) {
-    filelist = fileinput.files;
-
+    filelist = Array.from(fileinput.files);
     fileIndex = 0;
     createPlaylist(filelist);
     loadFile();
   }
+};
+
+createPlaylist = (filelist) => {
+  let playlistItems = document.createElement("ul");
+  playlistItems.setAttribute("class", "playlist");
+  Array.from(filelist).forEach((item, index) => {
+    let li = document.createElement("li");
+    li.setAttribute("id", index);
+    li.setAttribute("class", "playlist-item");
+    li.innerHTML = `<span>${index + 1} - </span> <span>${item.name}</span>`;
+    playlistItems.append(li);
+  });
+  playlistContainer.innerHTML = `<button type="button" class="close-playlist">
+      <i class="ri-close-fill" ></i>
+  </button>`;
+  playlistContainer.append(playlistItems);
+  playlistClose = document.querySelector(".close-playlist");
+  playlistClose.onclick = () => {
+    playlistContainer.classList.add("remove");
+  };
+
+  listItem = document.querySelectorAll(".playlist-item");
+  Array.from(listItem).map((e) => {
+    e.onclick = () => {
+      playlistContainer.classList.add("remove");
+      fileIndex = parseInt(e.id);
+      loadFile();
+    };
+  });
 };
 
 loadFile = () => {
@@ -68,38 +74,11 @@ loadFile = () => {
   };
 };
 
-createPlaylist = (filelist) => {
-  let playlistItems = document.createElement("ul");
-  playlistItems.setAttribute("class", "playlist");
-  Array.from(filelist).forEach((item, index) => {
-    let li = document.createElement("li");
-    li.setAttribute("id", index);
-    li.setAttribute("class", "playlist-item");
-    li.innerHTML = `<span>${index + 1} - </span> <span>${item.name}</span>`;
-    playlistItems.append(li);
-  });
-  playlistContainer.innerHTML = `<button type="button" class="close-playlist">
-      <i class="ri-close-fill" ></i>
-  </button>`;
-  playlistContainer.append(playlistItems);
-  playlistClose = document.querySelector(".close-playlist");
-  playlistClose.onclick = () => {
-    playlistContainer.classList.add("remove");
-  };
-
-  listItem = document.querySelectorAll(".playlist-item");
-  Array.from(listItem).map((e) => {
-    e.onclick = () => {
-      playlistContainer.classList.add("remove");
-      fileIndex = parseInt(e.id);
-      loadFile();
-    };
-  });
-};
-
-clearPlayerInterval = () => {
-  if (typeof playerInterval !== "undefined") {
-    window.clearInterval(playerInterval);
+changePlayState = () => {
+  if (media.paused) {
+    media.play();
+  } else {
+    media.pause();
   }
 };
 
@@ -116,7 +95,6 @@ prevFile = () => {
 
 nextFile = () => {
   clearPlayerInterval();
-
   if (fileIndex < filelist.length - 1) {
     fileIndex++;
     loadFile();
@@ -126,10 +104,27 @@ nextFile = () => {
   }
 };
 
+rewind = (n) => {
+  if (media.currentTime > n) {
+    media.currentTime = media.currentTime - n;
+  }
+};
+
+forward = (n) => {
+  if (media.currentTime < media.duration - n) {
+    media.currentTime = media.currentTime + n;
+  }
+};
+
 shufflePlaylist = (arr) => {
   let shuffled = [];
   while (arr.length > shuffled.length) {
-    shuffled.push(arr[Math.floor(Math.random() * arr.length)]);
+    let randomFile = arr[Math.floor(Math.random() * arr.length)]
+
+    if (!shuffled.includes(randomFile)) {
+      shuffled.push(randomFile)
+    }
+    console.log(randomFile);
   }
   return shuffled;
 };
@@ -154,16 +149,7 @@ toggleRepeat = () => {
   console.log("toggle repeat");
 };
 
-rewind = (n) => {
-  if (media.currentTime > n) {
-    media.currentTime = media.currentTime - n;
-  }
-};
-forward = (n) => {
-  if (media.currentTime < media.duration - n) {
-    media.currentTime = media.currentTime + n;
-  }
-};
+
 volumeUp = (n) => {
   if (media.volume + n / 100 <= 1) {
     media.volume += n / 100;
@@ -191,5 +177,25 @@ muteVolume = () => {
     volumeIcon.classList.add("ri-volume-up-fill");
     volume.disabled = false;
     volume.style.cursor = "pointer";
+  }
+};
+
+timeFormat = (timeInSecond) => {
+  const hour = Math.floor(timeInSecond / 3600);
+  const min = Math.floor((timeInSecond - hour * 3600) / 60);
+  const sec = Math.floor(timeInSecond - hour * 3600 - min * 60);
+  let timeFormated = "";
+  if (hour < 1) {
+    timeFormated = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
+  } else {
+    timeFormated = `${hour > 9 ? hour : "0" + hour}:${min > 9 ? min : "0" + min
+      }:${sec > 9 ? sec : "0" + sec}`;
+  }
+  return timeFormated;
+};
+
+clearPlayerInterval = () => {
+  if (typeof playerInterval !== "undefined") {
+    window.clearInterval(playerInterval);
   }
 };

@@ -55,7 +55,7 @@ body {
 }
 
 .remove {
-  animation: remove linear 0.5s;
+  animation: remove linear 0.2s;
   display: none;
 }
 
@@ -71,7 +71,7 @@ body {
 }
 
 .hide {
-  animation: hide linear 0.3s;
+  animation: hide linear 0.2s;
   opacity: 0;
 }
 
@@ -86,7 +86,7 @@ body {
 }
 
 .show {
-  animation: show linear 0.3s;
+  animation: show linear 0.2s;
   opacity: 1;
 }
 
@@ -371,8 +371,24 @@ video {
   z-index: 1;
 }
 
+.playlist-container-shrink {
+  animation: shrink 0.2s linear;
+}
+
+@keyframes shrink {
+  0% {
+    height: calc(100vh - 40px);
+    bottom: 20px;
+  }
+
+  100% {
+    height: calc(100vh - 155px);
+    bottom: 115px;
+  }
+}
+
 .playlist-container-grow {
-  animation: grow 0.3s linear;
+  animation: grow 0.2s linear;
 }
 
 @keyframes grow {
@@ -397,12 +413,13 @@ video {
 }
 
 .playlist .playlist-item {
-  padding: 8px 10px;
-  margin: 5px 0;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 10px;
   overflow-x: hidden;
   text-overflow: ellipsis;
   text-wrap: nowrap;
+  cursor: pointer;
+  margin: 0;
 }
 
 .playlist .playlist-item:hover {

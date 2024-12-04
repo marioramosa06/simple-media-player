@@ -17,19 +17,15 @@ createPlaylist = (filelist) => {
     li.innerHTML = `<span>${index + 1} - </span> <span>${item.name}</span>`;
     playlistItems.append(li);
   });
-  playlistContainer.innerHTML = `<button type="button" class="close-playlist">
+  playlistContainer.innerHTML = `<button type="button" class="close-playlist" onclick="hidePlaylist()">
       <i class="ri-close-fill" ></i>
   </button>`;
   playlistContainer.append(playlistItems);
-  playlistClose = document.querySelector(".close-playlist");
-  playlistClose.onclick = () => {
-    playlistContainer.classList.add("remove");
-  };
 
   listItem = document.querySelectorAll(".playlist-item");
   Array.from(listItem).map((e) => {
     e.onclick = () => {
-      playlistContainer.classList.add("remove");
+      hidePlaylist();
       fileIndex = parseInt(e.id);
       loadFile();
     };
@@ -75,36 +71,56 @@ loadFile = () => {
 };
 
 showPlaylist = () => {
-  playlistContainer.style.display = "block";
-  playlistContainer.classList.add("show");
-  playlistContainer.classList.remove("hide");
-}
+  if (playlistContainer.style.display == "none") {
+    playlistContainer.style.display = "block";
+    playlistContainer.classList.add("show");
+    playlistContainer.classList.remove("hide");
+  }
+  if (playlistContainer.classList.contains("playlist-container-shrink")) {
+    playlistContainer.classList.remove("playlist-container-shrink");
+  } else if (playlistContainer.classList.contains("playlist-container-grow")) {
+    playlistContainer.classList.remove("playlist-container-grow");
+  }
+};
 
 hidePlaylist = () => {
-  playlistContainer.classList.remove("show");
-  playlistContainer.classList.add("hide");
-  playlistContainer.style.display = "none";
-}
+  if (playlistContainer.style.display == "block") {
+    playlistContainer.classList.remove("show");
+    playlistContainer.classList.add("hide");
+    let hideTimeOut = window.setTimeout(() => {
+      playlistContainer.style.display = "none";
+      window.clearTimeout(hideTimeOut);
+    }, 350);
+  }
+};
+
+growPlaylist = () => {
+  playlistContainer.classList.remove("playlist-container-shrink");
+  playlistContainer.classList.add("playlist-container-grow");
+  playlistContainer.style.height = "calc(100vh - 40px)";
+  playlistContainer.style.bottom = "20px";
+};
+
+shrinkPlaylist = () => {
+  playlistContainer.classList.remove("playlist-container-grow");
+  playlistContainer.classList.add("playlist-container-shrink");
+  playlistContainer.style.height = "calc(100vh - 145px)";
+  playlistContainer.style.bottom = "105px";
+};
 
 showControls = () => {
   controls.classList.remove("hide");
   fileName.classList.remove("hide");
   controls.classList.add("show");
   fileName.classList.add("show");
-  playlistContainer.classList.remove("playlist-container-grow");
-  playlistContainer.style.height = "calc(100vh - 145px)";
-  playlistContainer.style.bottom = "105px";
-}
+};
 
 hideControls = () => {
   controls.classList.remove("show");
   fileName.classList.remove("show");
   controls.classList.add("hide");
   fileName.classList.add("hide");
-  playlistContainer.classList.add("playlist-container-grow");
-  playlistContainer.style.height = "calc(100vh - 40px)";
-  playlistContainer.style.bottom = "20px";
-}
+};
 
 changePlayState = () => {
   if (media.paused) {
@@ -151,12 +167,11 @@ forward = (n) => {
 shufflePlaylist = (arr) => {
   let shuffled = [];
   while (arr.length > shuffled.length) {
-    let randomFile = arr[Math.floor(Math.random() * arr.length)]
+    let randomFile = arr[Math.floor(Math.random() * arr.length)];
 
     if (!shuffled.includes(randomFile)) {
-      shuffled.push(randomFile)
+      shuffled.push(randomFile);
     }
-    console.log(randomFile);
   }
   return shuffled;
 };
@@ -180,7 +195,6 @@ toggleShuffle = () => {
 toggleRepeat = () => {
   console.log("toggle repeat");
 };
-
 
 volumeUp = (n) => {
   if (media.volume + n / 100 <= 1) {
@@ -220,8 +234,7 @@ timeFormat = (timeInSecond) => {
   if (hour < 1) {
     timeFormated = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
   } else {
-    timeFormated = `${hour > 9 ? hour : "0" + hour}:${min > 9 ? min : "0" + min
-      }:${sec > 9 ? sec : "0" + sec}`;
+    timeFormated = `${hour > 9 ? hour : "0" + hour}:${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
   }
   return timeFormated;
 };

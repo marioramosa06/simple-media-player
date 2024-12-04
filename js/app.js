@@ -1,5 +1,7 @@
-playlistClose.onclick = () => {
-  hidePlaylist()
+playlistClose.onclick = (e) => {
+  console.log(e);
+
+  hidePlaylist();
 };
 
 volume.oninput = () => {
@@ -45,7 +47,6 @@ window.onkeydown = (e) => {
   if (e.key == "Escape") {
     hidePlaylist();
   }
-
 };
 
 let timeOut = undefined;
@@ -53,16 +54,23 @@ controls.onmouseenter = (e) => {
   if (timeOut !== undefined) {
     window.clearTimeout(timeOut);
   }
-  showControls()
+  if (controls.classList.contains("hide")) {
+    showControls();
+    if (playlistContainer.style.display == "block") {
+      shrinkPlaylist();
+    }
+  }
 };
 
 controls.onmouseleave = (e) => {
   timeOut = window.setTimeout(() => {
-    hideControls()
+    hideControls();
+    if (playlistContainer.style.display == "block") {
+      growPlaylist();
+    }
     window.clearTimeout(timeOut);
-  }, 3000);
+  }, 300);
 };
-
 
 filePicker.onchange = () => {
   pickFiles(filePicker);
@@ -70,9 +78,9 @@ filePicker.onchange = () => {
 
 playlistTrigger.onclick = () => {
   if (playlistContainer.classList.contains("hide")) {
-    showPlaylist()
+    showPlaylist();
   } else {
-    hidePlaylist()
+    hidePlaylist();
   }
 };
 
@@ -89,8 +97,8 @@ nextBtn.onclick = () => {
 };
 
 slider.oninput = () => {
-  if (typeof (playerInterval) !== "undefined") {
-    window.clearInterval(playerInterval)
+  if (typeof playerInterval !== "undefined") {
+    window.clearInterval(playerInterval);
   }
   media.currentTime = slider.value;
 };
@@ -100,7 +108,7 @@ media.onplay = () => {
 };
 
 media.onpause = () => {
-  playBtn.innerHTML = `<i class="ri-play-fill" id="play-btn-icon"></i>`
+  playBtn.innerHTML = `<i class="ri-play-fill" id="play-btn-icon"></i>`;
 };
 
 media.addEventListener("error", function () {

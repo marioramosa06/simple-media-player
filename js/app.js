@@ -15,6 +15,21 @@ volumeIcon.onclick = () => {
   muteVolume();
 };
 
+media.ondblclick = (e) => {
+  console.log(e);
+  document.body.webkitRequestFullScreen();
+};
+
+media.ontouchstart = (e) => {
+  console.log(e);
+
+  if (!controls.classList.contains("show")) {
+    showControls();
+  } else {
+    hideControls();
+  }
+};
+
 window.onkeydown = (e) => {
   // e.preventDefault();
   if (e.code == "Space") {
@@ -69,7 +84,7 @@ controls.onmouseleave = (e) => {
       growPlaylist();
     }
     window.clearTimeout(timeOut);
-  }, 300);
+  }, 3000);
 };
 
 filePicker.onchange = () => {

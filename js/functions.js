@@ -35,6 +35,7 @@ createPlaylist = (filelist) => {
 loadFile = () => {
   loader.classList.remove("hide");
   const currentFile = filelist[fileIndex];
+
   let fileReader = new FileReader();
 
   fileReader.readAsArrayBuffer(currentFile);
@@ -76,10 +77,15 @@ showPlaylist = () => {
     playlistContainer.classList.add("show");
     playlistContainer.classList.remove("hide");
   }
-  if (playlistContainer.classList.contains("playlist-container-shrink")) {
-    playlistContainer.classList.remove("playlist-container-shrink");
-  } else if (playlistContainer.classList.contains("playlist-container-grow")) {
-    playlistContainer.classList.remove("playlist-container-grow");
+
+  if (!controls.classList.contains("hide")) {
+    if (!playlistContainer.classList.contains("playlist-container-shrink")) {
+      shrinkPlaylist();
+    }
+  } else {
+    if (!playlistContainer.classList.contains("playlist-container-grow")) {
+      growPlaylist();
+    }
   }
 };
 
@@ -102,10 +108,12 @@ growPlaylist = () => {
 };
 
 shrinkPlaylist = () => {
-  playlistContainer.classList.remove("playlist-container-grow");
-  playlistContainer.classList.add("playlist-container-shrink");
-  playlistContainer.style.height = "calc(100vh - 145px)";
-  playlistContainer.style.bottom = "105px";
+  if (playlistContainer.classList.contains("playlist-container-grow")) {
+    playlistContainer.classList.remove("playlist-container-grow");
+    playlistContainer.classList.add("playlist-container-shrink");
+    playlistContainer.style.height = "calc(100vh - 150px)";
+    playlistContainer.style.bottom = "110px";
+  }
 };
 
 showControls = () => {
@@ -123,11 +131,7 @@ hideControls = () => {
 };
 
 changePlayState = () => {
-  if (media.paused) {
-    media.play();
-  } else {
-    media.pause();
-  }
+  media.paused ? media.play() : media.pause();
 };
 
 prevFile = () => {
@@ -232,9 +236,14 @@ timeFormat = (timeInSecond) => {
   const sec = Math.floor(timeInSecond - hour * 3600 - min * 60);
   let timeFormated = "";
   if (hour < 1) {
-    timeFormated = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
+    // timeFormated = `${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
+    timeFormated = `${min.toString().padStart(2, "0")}:${sec
+      .toString()
+      .padStart(2, "0")}`;
   } else {
-    timeFormated = `${hour > 9 ? hour : "0" + hour}:${min > 9 ? min : "0" + min}:${sec > 9 ? sec : "0" + sec}`;
+    timeFormated = `${hour.toString().padStart(2, "0")}:${min
+      .toString()
+      .padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
   }
   return timeFormated;
 };

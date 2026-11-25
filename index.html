@@ -1,90 +1,290 @@
 <!DOCTYPE html>
-<html lang="mg">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Simple JS media player with Web Audio visualizer and responsive playlist" />
   <title id="title">Mario Player</title>
   <link rel="manifest" href="./manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./css/remixicon.css" />
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 
 <body>
-  <div class="loader hide">
-    <i class="ri-loader-4-fill spinner"></i>
-    <span> adiaso bitaka...</span>
+  <div class="app-shell" id="app-shell">
+    <header class="top-bar">
+      <div class="brand-zone">
+        <span class="brand-title">Mario Player</span>
+      </div>
+      <div class="track-zone">
+        <span class="file-name" aria-live="polite">No media loaded</span>
+      </div>
+      <div class="top-actions">
+        <button type="button" id="theme-btn" class="icon-btn" aria-label="Toggle color theme" title="Toggle theme">
+          <i class="ri-contrast-2-line" id="theme-btn-icon"></i>
+        </button>
+        <button type="button" id="fullscreen-btn" class="icon-btn" aria-label="Toggle fullscreen" title="Fullscreen">
+          <i class="ri-fullscreen-line" id="fullscreen-btn-icon"></i>
+        </button>
+        <button type="button" id="top-playlist-btn" class="icon-btn" aria-label="Toggle playlist" aria-expanded="false" title="Playlist">
+          <i class="ri-play-list-2-line"></i>
+        </button>
+        <button type="button" id="settings-btn" class="icon-btn" aria-label="Open settings" aria-expanded="false" title="Settings">
+          <i class="ri-settings-3-line"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="player-stage" id="player-stage" aria-label="Media player stage">
+        <video id="video" preload="auto" autoplay playsinline></video>
+        <canvas id="visualizer" class="visualizer-overlay" data-testid="visualizer" aria-hidden="true"></canvas>
+
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon" aria-hidden="true">
+            <i class="ri-film-line"></i>
+          </div>
+          <h1 class="empty-title">Open video or audio</h1>
+          <p class="empty-copy">Drop files anywhere here or choose multiple tracks to build your playlist.</p>
+          <label for="file" class="primary-cta" tabindex="0" role="button" aria-label="Choose media files">
+            <i class="ri-folder-add-line" aria-hidden="true"></i>
+            <span>Choose Media Files</span>
+          </label>
+        </div>
+
+        <div class="loader hide" role="status" aria-live="polite">
+          <i class="ri-loader-4-fill spinner" aria-hidden="true"></i>
+          <span>Loading media...</span>
+        </div>
+
+        <div class="controls" role="region" aria-label="Playback controls">
+          <div class="progress">
+            <div class="time" id="time-elapsed">00:00</div>
+            <div class="progress-bar">
+              <input type="range" id="progress-bar-slider" class="slider" min="0" max="0" value="0" aria-label="Playback progress" />
+            </div>
+            <div class="time" id="time-total">00:00</div>
+          </div>
+
+          <div class="bottom-container">
+            <div class="bottom start">
+              <label for="file" class="icon-btn file-picker" title="Open files" aria-label="Open media files" tabindex="0">
+                <i class="ri-folder-open-line" aria-hidden="true"></i>
+              </label>
+              <button type="button" class="icon-btn playlist-trigger" title="Playlist" aria-label="Toggle playlist" aria-expanded="false">
+                <i class="ri-list-check-2" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div class="control-container">
+              <button type="button" class="control" id="repeat-btn" title="Repeat: Off" aria-label="Repeat mode: Off" aria-pressed="false">
+                <i class="ri-repeat-line" id="reapeat-btn-icon" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="control" id="prev-btn" title="Previous track" aria-label="Previous track">
+                <i class="ri-skip-back-fill" id="prev-btn-icon" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="control play-primary" id="play-btn" title="Play or pause" aria-label="Play">
+                <i class="ri-play-fill" id="play-btn-icon" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="control" id="next-btn" title="Next track" aria-label="Next track">
+                <i class="ri-skip-forward-fill" id="next-btn-icon" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="control" id="shuffle-btn" title="Shuffle" aria-label="Toggle shuffle" aria-pressed="false">
+                <i class="ri-shuffle-line" id="shuffle-btn-icon" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div class="bottom end">
+              <button type="button" class="icon-btn volume" id="mute-btn" title="Mute or unmute" aria-label="Mute">
+                <i class="ri-volume-up-fill volume-icon" aria-hidden="true"></i>
+              </button>
+              <div class="volume-slider" title="100%">
+                <input type="range" id="volume-slider" class="slider" min="0" max="100" value="100" aria-label="Volume" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="playlist-backdrop" id="playlist-backdrop" aria-hidden="true"></div>
+
+      <aside class="playlist-container hide" aria-label="Playlist" style="display: none">
+        <div class="playlist-sheet-handle" aria-hidden="true"></div>
+        <div class="playlist-header">
+          <div class="playlist-title-group">
+            <h2 class="playlist-title">Playlist</h2>
+            <span class="playlist-count" id="playlist-count">0 tracks</span>
+          </div>
+          <div class="playlist-header-actions">
+            <label for="file" class="icon-btn" title="Add media files" aria-label="Add media files" tabindex="0">
+              <i class="ri-play-list-add-line" aria-hidden="true"></i>
+            </label>
+            <button type="button" class="icon-btn close-playlist" aria-label="Close playlist" title="Close playlist">
+              <i class="ri-close-line" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="playlist-body" id="playlist-body">
+          <div class="nolist">
+            <p>No tracks queued yet.</p>
+            <label for="file" class="primary-cta compact" tabindex="0" role="button" aria-label="Add media files">
+              <i class="ri-play-list-add-line" aria-hidden="true"></i>
+              <span>Add Media Files</span>
+            </label>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <section class="settings-page" id="settings-page" aria-label="Settings" hidden>
+      <div class="settings-container">
+        <div class="settings-top">
+          <button type="button" id="settings-back-btn" class="back-btn">
+            <i class="ri-arrow-left-line" aria-hidden="true"></i>
+            <span>Back to Player</span>
+          </button>
+          <button type="button" id="settings-reset-btn" class="reset-btn">
+            Reset to Defaults
+          </button>
+        </div>
+
+        <div class="settings-intro">
+          <h1 class="settings-heading">Settings</h1>
+          <p class="settings-subcopy">Preferences are saved locally in your browser and applied automatically.</p>
+        </div>
+
+        <div class="settings-section">
+          <h2 class="settings-section-title">Appearance</h2>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Color Theme</div>
+              <div class="setting-desc">Choose light, dark, or follow your operating system preference.</div>
+            </div>
+            <div class="segmented-control" role="group" aria-label="Color theme" data-setting="theme">
+              <button type="button" class="seg-btn" data-value="system">System</button>
+              <button type="button" class="seg-btn" data-value="light">Light</button>
+              <button type="button" class="seg-btn" data-value="dark">Dark</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h2 class="settings-section-title">Playback &amp; Audio</h2>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <label for="settings-volume-slider" class="setting-label">Default Volume</label>
+              <div class="setting-desc">Sets the player volume and saves it across reloads.</div>
+            </div>
+            <div class="setting-volume-control">
+              <input type="range" id="settings-volume-slider" class="slider" min="0" max="100" value="100" aria-label="Default volume" />
+              <span class="setting-value-readout" id="settings-volume-value">100%</span>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Playback Speed</div>
+              <div class="setting-desc">Adjust default audio and video playback rate.</div>
+            </div>
+            <div class="segmented-control" role="group" aria-label="Playback speed" data-setting="playbackRate">
+              <button type="button" class="seg-btn" data-value="0.75">0.75x</button>
+              <button type="button" class="seg-btn" data-value="1">1x</button>
+              <button type="button" class="seg-btn" data-value="1.25">1.25x</button>
+              <button type="button" class="seg-btn" data-value="1.5">1.5x</button>
+              <button type="button" class="seg-btn" data-value="2">2x</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Seek Step</div>
+              <div class="setting-desc">Jump interval when pressing Left or Right arrow keys.</div>
+            </div>
+            <div class="segmented-control" role="group" aria-label="Seek step" data-setting="seekStep">
+              <button type="button" class="seg-btn" data-value="5">5s</button>
+              <button type="button" class="seg-btn" data-value="10">10s</button>
+              <button type="button" class="seg-btn" data-value="15">15s</button>
+              <button type="button" class="seg-btn" data-value="30">30s</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Repeat Mode</div>
+              <div class="setting-desc">Control track or playlist looping when playback ends.</div>
+            </div>
+            <div class="segmented-control" role="group" aria-label="Repeat mode" data-setting="repeatMode">
+              <button type="button" class="seg-btn" data-value="off">Off</button>
+              <button type="button" class="seg-btn" data-value="all">All</button>
+              <button type="button" class="seg-btn" data-value="one">One</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Auto-Hide Controls</div>
+              <div class="setting-desc">Fade out the playback dock while watching full-motion video.</div>
+            </div>
+            <button type="button" class="switch-btn" id="setting-autohide-switch" role="switch" aria-checked="true" aria-label="Auto-hide controls">
+              <span class="switch-thumb"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h2 class="settings-section-title">Audio Visualizer</h2>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Visualizer Overlay</div>
+              <div class="setting-desc">Show live Web Audio visuals over the video stage during playback.</div>
+            </div>
+            <button type="button" class="switch-btn" id="setting-visualizer-switch" role="switch" aria-checked="true" aria-label="Visualizer overlay">
+              <span class="switch-thumb"></span>
+            </button>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Visualizer Style</div>
+              <div class="setting-desc">Switch between symmetric frequency bars and an audio waveform.</div>
+            </div>
+            <div class="segmented-control" role="group" aria-label="Visualizer style" data-setting="visualizerStyle">
+              <button type="button" class="seg-btn" data-value="bars">Bars</button>
+              <button type="button" class="seg-btn" data-value="waveform">Waveform</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section settings-section-last">
+          <h2 class="settings-section-title">Keyboard Shortcuts</h2>
+          <div class="shortcuts-grid">
+            <div class="shortcut-item"><span>Play / Pause</span><kbd>Space</kbd></div>
+            <div class="shortcut-item"><span>Seek Backward / Forward</span><kbd>← / →</kbd></div>
+            <div class="shortcut-item"><span>Volume Up / Down</span><kbd>↑ / ↓</kbd></div>
+            <div class="shortcut-item"><span>Mute / Unmute</span><kbd>M</kbd></div>
+            <div class="shortcut-item"><span>Previous / Next Track</span><kbd>P / N</kbd></div>
+            <div class="shortcut-item"><span>Toggle Playlist</span><kbd>L</kbd></div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
-  <span class="file-name">...</span>
 
-  <video id="video" preload="auto" autoplay></video>
-  <div class="playlist-container hide" style="display:none">
-    <div class="nolist">
-      <span>mampidira raha alefa eky maloaka</span>
-      <label for="file" class="file-picker" title="hampiditra">
-        <i class="ri-play-list-add-fill"></i>
+  <input type="file" name="file" id="file" class="sr-only" accept="video/*,audio/*" multiple />
 
-        <input type="file" id="filepicker-nolist" class="file-picker" style="display: none" accept="video/*,audio/*"
-          multiple />
-      </label>
-    </div>
-    <button type="button" class="close-playlist" onclick="hidePlaylist()">
-      <i class="ri-close-fill"></i>
-    </button>
-  </div>
-  <div class="controls">
-    <div class="progress">
-
-      <div class="time" id="time-elapsed">00:00</div>
-      <div class="progress-bar">
-        <input type="range" id="progress-bar-slider" class="slider" min="0" max="" value="0" />
-      </div>
-      <div class="time" id="time-total">00:00</div>
-
-    </div>
-    <div class="bottom-container">
-      <div class="bottom start">
-        <label for="file" class="file-picker" title="hampiditra">
-          <i class="ri-folder-5-fill"></i>
-          <input type="file" name="file" id="file" class="file-picker" style="display: none" accept="video/*,audio/*"
-            multiple />
-        </label>
-
-        <div class="playlist-trigger" title="lisitra">
-          <i class="ri-list-check-2"></i>
-        </div>
-
-      </div>
-
-      <div class="control-container">
-        <div class="control" id="repeat-btn" onclick="toggleRepeat()" title="Aerigna">
-          <i class="ri-loop-left-fill" id="reapeat-btn-icon"></i>
-        </div>
-        <div class="control" id="prev-btn" title="taloha">
-          <i class="ri-skip-back-fill" id="prev-btn-icon"></i>
-        </div>
-        <div class="control" id="play-btn" title="alefa/tapahina">
-          <i class="ri-play-fill" id="play-btn-icon"></i>
-        </div>
-        <div class="control" id="next-btn" title="magnaraka">
-          <i class="ri-skip-forward-fill" id="next-btn-icon"></i>
-        </div>
-        <div class="control" id="shuffle-btn" onclick="toggleShuffle()" title="Afangaro">
-          <i class="ri-shuffle-fill" id="shuffle-btn-icon"></i>
-        </div>
-      </div>
-
-      <div class="bottom end">
-        <div class="volume">
-          <i class="ri-volume-up-fill volume-icon"></i>
-        </div>
-        <div class="volume-slider" title="100%">
-          <input type="range" id="volume-slider" class="slider" min="0" max="100" value="100" />
-        </div>
-      </div>
-    </div>
-  </div>
   <script src="./js/variables.js"></script>
+  <script src="./js/settings-utils.js"></script>
+  <script src="./js/volume-utils.js"></script>
+  <script src="./js/player-utils.js"></script>
+  <script src="./js/visualizer-utils.js"></script>
+  <script src="./js/visualizer.js"></script>
   <script src="./js/functions.js"></script>
   <script src="./js/app.js"></script>
 </body>

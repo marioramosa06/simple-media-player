@@ -1,4 +1,4 @@
-const cacheName = "static";
+const cacheName = "static-v5";
 const assets = [
   "./",
   "./index.html",
@@ -18,24 +18,51 @@ const assets = [
   "./js/app.js",
   "./js/functions.js",
   "./js/variables.js",
+  "./js/settings-utils.js",
+  "./js/player-utils.js",
+  "./js/volume-utils.js",
+  "./js/visualizer-utils.js",
+  "./js/visualizer.js",
 ];
 
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(cacheName).then((cache) => {
-      cache.addAll(assets);
-    })
+    caches.open(cacheName).then((cache) => cache.addAll(assets))
   );
 });
 
-self.addEventListener("activate", function (event) {
-  console.log(event);
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((key) => key !== cacheName)
+            .map((key) => caches.delete(key))
+        )
+      )
+      .then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") {
+    return;
+  }
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches
+            .open(cacheName)
+            .then((cache) => cache.put(event.request, responseClone))
+            .catch(() => {});
+        }
+        return networkResponse;
+      })
+      .catch(() => caches.match(event.request))
   );
 });

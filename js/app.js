@@ -1,54 +1,140 @@
-playlistClose.onclick = (e) => {
-  console.log(e);
+loadSavedSettings();
+loadSavedVolume();
+updateSliderFill(slider);
 
+if (window.location.hash === "#settings") {
+  openSettings();
+}
+
+playlistClose.onclick = () => {
   hidePlaylist();
 };
 
+if (playlistBackdrop) {
+  playlistBackdrop.onclick = () => {
+    hidePlaylist();
+  };
+}
+
+if (topPlaylistBtn) {
+  topPlaylistBtn.onclick = () => {
+    if (settingsPageEl && !settingsPageEl.hidden) {
+      closeSettings();
+    }
+    togglePlaylist();
+  };
+}
+
+if (settingsBtn) {
+  settingsBtn.onclick = () => {
+    toggleSettings();
+  };
+}
+
+if (settingsBackBtn) {
+  settingsBackBtn.onclick = () => {
+    closeSettings();
+  };
+}
+
+if (settingsResetBtn) {
+  settingsResetBtn.onclick = () => {
+    resetAllSettings();
+  };
+}
+
+if (settingsVolumeSlider) {
+  settingsVolumeSlider.oninput = () => {
+    applyVolume(settingsVolumeSlider.value, true);
+  };
+}
+
+if (settingAutohideSwitch) {
+  settingAutohideSwitch.onclick = () => {
+    applyAppSettings(
+      { ...appSettings, autoHideControls: !appSettings.autoHideControls },
+      true
+    );
+  };
+}
+
+if (settingVisualizerSwitch) {
+  settingVisualizerSwitch.onclick = () => {
+    applyAppSettings(
+      { ...appSettings, visualizerEnabled: !appSettings.visualizerEnabled },
+      true
+    );
+  };
+}
+
+document.querySelectorAll(".segmented-control[data-setting]").forEach((group) => {
+  const key = group.dataset.setting;
+  group.querySelectorAll(".seg-btn").forEach((btn) => {
+    btn.onclick = () => {
+      const rawVal = btn.dataset.value;
+      const parsedVal =
+        key === "seekStep" || key === "playbackRate" ? Number(rawVal) : rawVal;
+      applyAppSettings({ ...appSettings, [key]: parsedVal }, true);
+    };
+  });
+});
+
+if (themeBtn) {
+  themeBtn.onclick = () => {
+    toggleTheme();
+  };
+}
+
+if (fullscreenBtn) {
+  fullscreenBtn.onclick = () => {
+    toggleFullscreen();
+  };
+}
+
 volume.oninput = () => {
-  media.volume = volume.value / 100;
-  document
-    .querySelector(".volume-slider")
-    .setAttribute("title", `${volume.value}%`);
+  applyVolume(volume.value, true);
 };
 
-volumeIcon.onclick = () => {
-  muteVolume();
+if (muteBtn) {
+  muteBtn.onclick = () => {
+    muteVolume();
+  };
+}
+
+media.ondblclick = () => {
+  toggleFullscreen();
 };
 
-media.ondblclick = (e) => {
-  console.log(e);
-  if (document.body.requestFullscreen) {
-    document.body.requestFullscreen().catch(() => {});
-  } else if (document.body.webkitRequestFullScreen) {
-    document.body.webkitRequestFullScreen();
-  }
-};
-
-media.ontouchstart = (e) => {
-  console.log(e);
-
-  if (!controls.classList.contains("show")) {
-    showControls();
-  } else {
-    hideControls();
+media.onclick = () => {
+  if (filelist.length > 0) {
+    if (controls.classList.contains("hide")) {
+      showControls();
+    } else if (media.videoWidth > 0) {
+      changePlayState();
+    }
   }
 };
 
 window.onkeydown = (e) => {
-  // e.preventDefault();
+  if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) {
+    if (e.code !== "Space") return;
+  }
   if (e.code == "Space") {
+    e.preventDefault();
     changePlayState();
   }
   if (e.code == "ArrowLeft") {
-    rewind(10);
+    rewind(seekStepSeconds);
   }
   if (e.code == "ArrowRight") {
-    forward(10);
+    forward(seekStepSeconds);
   }
   if (e.code == "ArrowUp") {
+    e.preventDefault();
     volumeUp(5);
   }
   if (e.code == "ArrowDown") {
+    e.preventDefault();
     volumeDown(5);
   }
   if (e.key == "P" || e.key == "p") {
@@ -61,47 +147,93 @@ window.onkeydown = (e) => {
     muteVolume();
   }
   if (e.key == "L" || e.key == "l") {
-    showPlaylist();
+    togglePlaylist();
   }
   if (e.key == "Escape") {
-    hidePlaylist();
+    if (settingsPageEl && !settingsPageEl.hidden) {
+      closeSettings();
+    } else {
+      hidePlaylist();
+    }
   }
 };
 
 let timeOut = undefined;
-controls.onmouseenter = (e) => {
+const resetControlTimeout = () => {
   if (timeOut !== undefined) {
     window.clearTimeout(timeOut);
   }
-  if (controls.classList.contains("hide")) {
-    showControls();
-    if (playlistContainer.style.display == "block") {
-      shrinkPlaylist();
-    }
+  showControls();
+  if (!media.paused && media.src && media.videoWidth > 0) {
+    timeOut = window.setTimeout(() => {
+      hideControls();
+    }, 3200);
   }
 };
 
-controls.onmouseleave = (e) => {
-  timeOut = window.setTimeout(() => {
-    hideControls();
-    if (playlistContainer.style.display == "block") {
-      growPlaylist();
+if (playerStage) {
+  playerStage.addEventListener("mousemove", resetControlTimeout, { passive: true });
+  playerStage.addEventListener("touchstart", resetControlTimeout, { passive: true });
+
+  playerStage.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    playerStage.classList.add("is-dragover");
+  });
+  playerStage.addEventListener("dragleave", () => {
+    playerStage.classList.remove("is-dragover");
+  });
+  playerStage.addEventListener("drop", (e) => {
+    e.preventDefault();
+    playerStage.classList.remove("is-dragover");
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      pickFiles(e.dataTransfer.files);
     }
+  });
+}
+
+controls.onmouseenter = () => {
+  if (timeOut !== undefined) {
     window.clearTimeout(timeOut);
-  }, 3000);
+  }
+  showControls();
+};
+
+controls.onmouseleave = () => {
+  if (!media.paused && media.src && media.videoWidth > 0) {
+    timeOut = window.setTimeout(() => {
+      hideControls();
+    }, 3000);
+  }
 };
 
 filePicker.onchange = () => {
   pickFiles(filePicker);
 };
 
+document.querySelectorAll('label[for="file"]').forEach((label) => {
+  label.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      filePicker.click();
+    }
+  });
+});
+
 playlistTrigger.onclick = () => {
-  if (playlistContainer.classList.contains("hide")) {
-    showPlaylist();
-  } else {
-    hidePlaylist();
-  }
+  togglePlaylist();
 };
+
+if (repeatBtn) {
+  repeatBtn.onclick = () => {
+    toggleRepeat();
+  };
+}
+
+if (shuffleBtn) {
+  shuffleBtn.onclick = () => {
+    toggleShuffle();
+  };
+}
 
 playBtn.onclick = () => {
   changePlayState();
@@ -116,18 +248,21 @@ nextBtn.onclick = () => {
 };
 
 slider.oninput = () => {
-  if (typeof playerInterval !== "undefined") {
-    window.clearInterval(playerInterval);
-  }
+  if (!media.src) return;
   media.currentTime = slider.value;
+  updateSliderFill(slider);
 };
 
 media.onplay = () => {
-  playBtn.innerHTML = `<i class="ri-pause-fill"></i>`;
+  playBtn.innerHTML = `<i class="ri-pause-fill" id="play-btn-icon" aria-hidden="true"></i>`;
+  playBtn.setAttribute("aria-label", "Pause");
+  resetControlTimeout();
 };
 
 media.onpause = () => {
-  playBtn.innerHTML = `<i class="ri-play-fill" id="play-btn-icon"></i>`;
+  playBtn.innerHTML = `<i class="ri-play-fill" id="play-btn-icon" aria-hidden="true"></i>`;
+  playBtn.setAttribute("aria-label", "Play");
+  showControls();
 };
 
 media.addEventListener("error", function () {
@@ -136,7 +271,7 @@ media.addEventListener("error", function () {
     return;
   }
   console.log("not supported, playing next file");
-  let fileErrorIndex = fileIndex;
+  const fileErrorIndex = fileIndex;
   listItem = document.querySelectorAll(".playlist-item");
   Array.from(listItem).forEach((e) => {
     if (e.id == fileErrorIndex) {
@@ -153,17 +288,17 @@ media.addEventListener("error", function () {
   }
 });
 
-media.addEventListener("ended", function (e) {
-  console.log("ended", e);
-  nextFile();
+media.addEventListener("ended", function () {
+  nextFile(true);
 });
 
 // service worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("./sw.js")
+      .register("./sw.js", { updateViaCache: "none" })
       .then((registration) => {
+        registration.update().catch(() => {});
         console.log("Service Worker registered:", registration);
       })
       .catch((error) => {

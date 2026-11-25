@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "node -c server.js",
-    "lint": "node -c server.js && node -c js/variables.js && node -c js/settings-utils.js && node -c js/player-utils.js && node -c js/volume-utils.js && node -c js/visualizer-utils.js && node -c js/visualizer.js && node -c js/functions.js && node -c js/app.js && node -c sw.js"
+    "build": "node -c server.js && node scripts/build.js",
+    "lint": "node -c server.js && node -c scripts/build.js && node -c js/variables.js && node -c js/settings-utils.js && node -c js/player-utils.js && node -c js/volume-utils.js && node -c js/visualizer-utils.js && node -c js/visualizer.js && node -c js/functions.js && node -c js/app.js && node -c sw.js"
   },
   "dependencies": {
     "express": "^4.21.2"

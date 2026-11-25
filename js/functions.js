@@ -17,6 +17,38 @@ pickFiles = (fileinput) => {
   }
 };
 
+addFilesToPlaylist = (incomingFiles) => {
+  const merged = window.PlayerUtils
+    ? window.PlayerUtils.mergeMediaFiles(filelist, incomingFiles)
+    : {
+        nextFiles: [...filelist, ...Array.from(incomingFiles || [])],
+        addedCount: incomingFiles ? incomingFiles.length : 0,
+        shouldAutoLoad: filelist.length === 0 && incomingFiles && incomingFiles.length > 0,
+      };
+
+  if (merged.addedCount === 0) {
+    return 0;
+  }
+
+  filelist = merged.nextFiles;
+  createPlaylist(filelist);
+
+  if (merged.shouldAutoLoad) {
+    fileIndex = 0;
+    if (settingsPageEl && !settingsPageEl.hidden) {
+      closeSettings();
+    }
+    loadFile();
+  } else {
+    const items = document.querySelectorAll(".playlist-item");
+    Array.from(items).forEach((e) => {
+      e.classList.toggle("playlist-item-playing", Number(e.id) === fileIndex);
+    });
+  }
+
+  return merged.addedCount;
+};
+
 createPlaylist = (files) => {
   const targetBody = playlistBody || playlistContainer;
   const playlistItems = document.createElement("ul");

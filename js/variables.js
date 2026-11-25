@@ -1,3 +1,4 @@
+const appShell = document.querySelector("#app-shell");
 const filePicker = document.querySelector("#file");
 const media = document.querySelector("#video");
 const playerStage = document.querySelector("#player-stage");

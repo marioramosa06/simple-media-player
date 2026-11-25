@@ -208,15 +208,53 @@ input[type="range"]:focus-visible {
   background-color: var(--bg-canvas);
 }
 
-.player-stage.is-dragover::after {
-  content: "";
-  position: absolute;
-  inset: 16px;
+.app-shell {
+  position: relative;
+}
+
+.drop-overlay {
+  display: none;
+  position: fixed;
+  inset: 12px;
   border: 2px dashed var(--primary);
   border-radius: 20px;
-  background-color: var(--primary-soft);
+  background-color: var(--bg-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
   pointer-events: none;
-  z-index: 15;
+}
+
+#app-shell.is-dragover .drop-overlay {
+  display: flex;
+}
+
+.drop-overlay-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 24px;
+  color: var(--text);
+}
+
+.drop-overlay-card i {
+  font-size: 2.25rem;
+  color: var(--primary);
+}
+
+.drop-overlay-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.drop-overlay-copy {
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 
 video {

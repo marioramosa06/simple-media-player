@@ -1,4 +1,4 @@
-const cacheName = "static-v5";
+const cacheName = "static-v6";
 const assets = [
   "./",
   "./index.html",

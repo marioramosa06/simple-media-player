@@ -174,22 +174,55 @@ const resetControlTimeout = () => {
 if (playerStage) {
   playerStage.addEventListener("mousemove", resetControlTimeout, { passive: true });
   playerStage.addEventListener("touchstart", resetControlTimeout, { passive: true });
+}
 
-  playerStage.addEventListener("dragover", (e) => {
+if (appShell) {
+  let dragDepth = 0;
+
+  const hasDraggedFiles = (e) =>
+    e.dataTransfer &&
+    e.dataTransfer.types &&
+    Array.from(e.dataTransfer.types).includes("Files");
+
+  appShell.addEventListener("dragenter", (e) => {
+    if (!hasDraggedFiles(e)) return;
     e.preventDefault();
-    playerStage.classList.add("is-dragover");
+    dragDepth += 1;
+    appShell.classList.add("is-dragover");
   });
-  playerStage.addEventListener("dragleave", () => {
-    playerStage.classList.remove("is-dragover");
-  });
-  playerStage.addEventListener("drop", (e) => {
+
+  appShell.addEventListener("dragover", (e) => {
+    if (!hasDraggedFiles(e)) return;
     e.preventDefault();
-    playerStage.classList.remove("is-dragover");
+    e.dataTransfer.dropEffect = "copy";
+    appShell.classList.add("is-dragover");
+  });
+
+  appShell.addEventListener("dragleave", (e) => {
+    if (!hasDraggedFiles(e)) return;
+    dragDepth = Math.max(0, dragDepth - 1);
+    if (dragDepth === 0) {
+      appShell.classList.remove("is-dragover");
+    }
+  });
+
+  appShell.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dragDepth = 0;
+    appShell.classList.remove("is-dragover");
     if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      pickFiles(e.dataTransfer.files);
+      addFilesToPlaylist(e.dataTransfer.files);
     }
   });
 }
+
+window.addEventListener("dragover", (e) => {
+  e.preventDefault();
+});
+
+window.addEventListener("drop", (e) => {
+  e.preventDefault();
+});
 
 controls.onmouseenter = () => {
   if (timeOut !== undefined) {

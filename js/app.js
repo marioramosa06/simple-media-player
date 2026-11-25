@@ -17,7 +17,11 @@ volumeIcon.onclick = () => {
 
 media.ondblclick = (e) => {
   console.log(e);
-  document.body.webkitRequestFullScreen();
+  if (document.body.requestFullscreen) {
+    document.body.requestFullscreen().catch(() => {});
+  } else if (document.body.webkitRequestFullScreen) {
+    document.body.webkitRequestFullScreen();
+  }
 };
 
 media.ontouchstart = (e) => {
@@ -127,6 +131,10 @@ media.onpause = () => {
 };
 
 media.addEventListener("error", function () {
+  if (!filelist || filelist.length === 0 || !media.getAttribute("src")) {
+    loader.classList.add("hide");
+    return;
+  }
   console.log("not supported, playing next file");
   let fileErrorIndex = fileIndex;
   listItem = document.querySelectorAll(".playlist-item");
@@ -135,7 +143,14 @@ media.addEventListener("error", function () {
       e.classList.add("playlist-item-error");
     }
   });
-  nextFile();
+  const hasPlayableCandidate = Array.from(listItem).some(
+    (e) => !e.classList.contains("playlist-item-error")
+  );
+  if (hasPlayableCandidate) {
+    nextFile();
+  } else {
+    loader.classList.add("hide");
+  }
 });
 
 media.addEventListener("ended", function (e) {

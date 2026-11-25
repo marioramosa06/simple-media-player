@@ -1,0 +1,5 @@
+{
+  "name": "Mario Player",
+  "description": "Simple JS media player using FileReader API",
+  "requestFramePermissions": []
+}

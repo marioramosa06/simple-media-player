@@ -33,14 +33,26 @@ createPlaylist = (filelist) => {
 };
 
 loadFile = () => {
-  loader.classList.remove("hide");
+  clearPlayerInterval();
+  if (!filelist || filelist.length === 0) {
+    loader.classList.add("hide");
+    return;
+  }
   const currentFile = filelist[fileIndex];
+  if (!(currentFile instanceof Blob)) {
+    loader.classList.add("hide");
+    return;
+  }
+
+  loader.classList.remove("hide");
 
   let fileReader = new FileReader();
 
   fileReader.readAsArrayBuffer(currentFile);
   fileReader.onload = (e) => {
-    let mediaBlob = new Blob([new Uint8Array(e.target.result)]);
+    let mediaBlob = new Blob([new Uint8Array(e.target.result)], {
+      type: currentFile.type || undefined,
+    });
     media.src = window.URL.createObjectURL(mediaBlob);
   };
 
@@ -54,7 +66,8 @@ loadFile = () => {
     document.title = currentFile.name;
     fileName.innerHTML = `${fileIndex + 1} - ${currentFile.name}`;
 
-    Array.from(listItem).forEach((e) => {
+    const items = document.querySelectorAll(".playlist-item");
+    Array.from(items).forEach((e) => {
       if (e.id == fileIndex) {
         e.classList.add("playlist-item-playing");
       } else {
@@ -63,10 +76,13 @@ loadFile = () => {
         }
       }
     });
+    clearPlayerInterval();
     playerInterval = window.setInterval(function () {
-      slider.value = Math.floor(media.currentTime);
-      totalTime.innerText = timeFormat(media.duration - media.currentTime);
-      elapsedTime.innerText = timeFormat(media.currentTime);
+      if (Number.isFinite(media.duration)) {
+        slider.value = Math.floor(media.currentTime);
+        totalTime.innerText = timeFormat(media.duration - media.currentTime);
+        elapsedTime.innerText = timeFormat(media.currentTime);
+      }
     }, 1000);
   };
 };
@@ -131,10 +147,20 @@ hideControls = () => {
 };
 
 changePlayState = () => {
-  media.paused ? media.play() : media.pause();
+  if (!filelist || filelist.length === 0 || !media.src) {
+    return;
+  }
+  if (media.paused) {
+    media.play().catch(() => {});
+  } else {
+    media.pause();
+  }
 };
 
 prevFile = () => {
+  if (!filelist || filelist.length === 0) {
+    return;
+  }
   clearPlayerInterval();
   if (fileIndex > 0) {
     fileIndex--;
@@ -146,6 +172,9 @@ prevFile = () => {
 };
 
 nextFile = () => {
+  if (!filelist || filelist.length === 0) {
+    return;
+  }
   clearPlayerInterval();
   if (fileIndex < filelist.length - 1) {
     fileIndex++;

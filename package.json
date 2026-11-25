@@ -1,0 +1,15 @@
+{
+  "name": "simple-media-player",
+  "version": "1.0.0",
+  "description": "Simple JS media player using FileReader API",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node -c server.js",
+    "lint": "node -c server.js && node -c js/variables.js && node -c js/functions.js && node -c js/app.js && node -c sw.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

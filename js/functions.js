@@ -49,6 +49,135 @@ addFilesToPlaylist = (incomingFiles) => {
   return merged.addedCount;
 };
 
+clearTrackMetadata = () => {
+  if (currentCoverUrl) {
+    window.URL.revokeObjectURL(currentCoverUrl);
+    currentCoverUrl = null;
+  }
+  currentTrackMeta = null;
+  if (trackCoverEl) {
+    trackCoverEl.removeAttribute("src");
+    trackCoverEl.hidden = true;
+  }
+  if (trackMetaTitleEl) {
+    trackMetaTitleEl.textContent = "";
+  }
+  if (trackMetaDetailsEl) {
+    trackMetaDetailsEl.textContent = "";
+  }
+  if (trackMetadataEl) {
+    trackMetadataEl.hidden = true;
+    trackMetadataEl.classList.remove("is-audio", "is-video", "no-cover", "is-controls-hidden");
+  }
+};
+
+formatPlaylistMetaText = (meta) => {
+  if (!meta) return "";
+  const parts = [];
+  if (meta.artist) parts.push(meta.artist);
+  if (meta.year) parts.push(meta.year);
+  return parts.join(" · ");
+};
+
+renderTrackMetadata = (meta, isVideo) => {
+  if (!trackMetadataEl || !meta || !meta.hasTags) {
+    if (trackMetadataEl) {
+      trackMetadataEl.hidden = true;
+    }
+    return;
+  }
+
+  if (trackMetaTitleEl) {
+    trackMetaTitleEl.textContent = meta.displayTitle;
+  }
+
+  const detailsText = window.MetadataUtils
+    ? window.MetadataUtils.formatMetadataDetails(meta)
+    : [meta.artist, meta.album, meta.year].filter(Boolean).join(" · ");
+
+  if (trackMetaDetailsEl) {
+    trackMetaDetailsEl.textContent = detailsText;
+  }
+
+  if (trackCoverEl) {
+    if (meta.picture && meta.picture.data && meta.picture.data.length > 0) {
+      if (!currentCoverUrl) {
+        const coverBlob = new Blob([meta.picture.data], {
+          type: meta.picture.mime || "image/jpeg",
+        });
+        currentCoverUrl = window.URL.createObjectURL(coverBlob);
+        trackCoverEl.onerror = () => {
+          trackCoverEl.hidden = true;
+          trackCoverEl.removeAttribute("src");
+          trackMetadataEl.classList.add("no-cover");
+        };
+        trackCoverEl.src = currentCoverUrl;
+      }
+      trackCoverEl.alt = meta.album
+        ? `${meta.album} album art`
+        : `${meta.displayTitle} album art`;
+      trackCoverEl.hidden = false;
+      trackMetadataEl.classList.remove("no-cover");
+    } else {
+      if (currentCoverUrl) {
+        window.URL.revokeObjectURL(currentCoverUrl);
+        currentCoverUrl = null;
+      }
+      trackCoverEl.removeAttribute("src");
+      trackCoverEl.hidden = true;
+      trackMetadataEl.classList.add("no-cover");
+    }
+  }
+
+  trackMetadataEl.classList.toggle("is-video", Boolean(isVideo));
+  trackMetadataEl.classList.toggle("is-audio", !isVideo);
+  if (!isVideo) {
+    trackMetadataEl.classList.remove("is-controls-hidden");
+  }
+  trackMetadataEl.hidden = false;
+};
+
+updateTopBarMetadata = (meta, index, fallbackName) => {
+  const titleText = meta && meta.displayTitle ? meta.displayTitle : fallbackName;
+  const topLabel =
+    meta && meta.artist ? `${titleText} · ${meta.artist}` : titleText;
+  document.title = `${topLabel} · Mario Player`;
+  fileName.textContent = `${index + 1} - ${topLabel}`;
+  fileName.classList.add("is-playing");
+};
+
+updatePlaylistItemMetadata = (index, meta) => {
+  const item = document.querySelector(`.playlist-item[id="${index}"]`);
+  if (!item || !meta) return;
+  const nameEl = item.querySelector(".playlist-item-name");
+  const metaEl = item.querySelector(".playlist-item-meta");
+  if (nameEl && meta.title) {
+    nameEl.textContent = meta.title;
+  }
+  if (metaEl) {
+    metaEl.textContent = formatPlaylistMetaText(meta);
+  }
+};
+
+updateMediaSession = (meta, coverUrl) => {
+  if (!("mediaSession" in navigator) || typeof window.MediaMetadata !== "function" || !meta) {
+    return;
+  }
+  try {
+    const artwork = coverUrl
+      ? [{ src: coverUrl, type: (meta.picture && meta.picture.mime) || "image/jpeg" }]
+      : [];
+    navigator.mediaSession.metadata = new window.MediaMetadata({
+      title: meta.displayTitle || "",
+      artist: meta.artist || "",
+      album: meta.album || "",
+      artwork,
+    });
+  } catch {
+    // Ignore unsupported MediaMetadata environments
+  }
+};
+
 createPlaylist = (files) => {
   const targetBody = playlistBody || playlistContainer;
   const playlistItems = document.createElement("ul");
@@ -65,11 +194,21 @@ createPlaylist = (files) => {
     idxSpan.className = "playlist-item-index";
     idxSpan.textContent = String(index + 1).padStart(2, "0");
 
+    const textWrap = document.createElement("span");
+    textWrap.className = "playlist-item-text";
+
+    const cachedMeta = fileMetadataMap.get(item);
+
     const nameSpan = document.createElement("span");
     nameSpan.className = "playlist-item-name";
-    nameSpan.textContent = item.name;
+    nameSpan.textContent = cachedMeta && cachedMeta.title ? cachedMeta.title : item.name;
 
-    li.append(idxSpan, nameSpan);
+    const metaSpan = document.createElement("span");
+    metaSpan.className = "playlist-item-meta";
+    metaSpan.textContent = formatPlaylistMetaText(cachedMeta);
+
+    textWrap.append(nameSpan, metaSpan);
+    li.append(idxSpan, textWrap);
     playlistItems.append(li);
   });
 
@@ -104,28 +243,59 @@ loadFile = () => {
   clearPlayerInterval();
   if (!filelist || filelist.length === 0) {
     loader.classList.add("hide");
+    clearTrackMetadata();
+    if (window.MiniPlayerController) {
+      window.MiniPlayerController.onPlaylistEmptied();
+    }
     if (emptyState) emptyState.classList.remove("is-hidden");
     return;
   }
   const currentFile = filelist[fileIndex];
   if (!(currentFile instanceof Blob)) {
     loader.classList.add("hide");
+    clearTrackMetadata();
     return;
   }
 
   if (emptyState) {
     emptyState.classList.add("is-hidden");
   }
+  clearTrackMetadata();
   loader.classList.remove("hide");
 
   const fileReader = new FileReader();
 
   fileReader.readAsArrayBuffer(currentFile);
   fileReader.onload = (e) => {
-    const mediaBlob = new Blob([new Uint8Array(e.target.result)], {
+    const buffer = e.target.result;
+    const meta = window.MetadataUtils
+      ? window.MetadataUtils.extractMediaMetadata(buffer, currentFile.name)
+      : {
+          title: "",
+          artist: "",
+          album: "",
+          year: "",
+          picture: null,
+          hasTags: false,
+          displayTitle: currentFile.name,
+        };
+    fileMetadataMap.set(currentFile, meta);
+    currentTrackMeta = meta;
+    renderTrackMetadata(meta, false);
+    updateTopBarMetadata(meta, fileIndex, currentFile.name);
+    updatePlaylistItemMetadata(fileIndex, meta);
+
+    const mediaBlob = new Blob([new Uint8Array(buffer)], {
       type: currentFile.type || undefined,
     });
-    media.src = window.URL.createObjectURL(mediaBlob);
+    if (currentMediaUrl) {
+      window.URL.revokeObjectURL(currentMediaUrl);
+    }
+    currentMediaUrl = window.URL.createObjectURL(mediaBlob);
+    media.src = currentMediaUrl;
+    if (window.MiniPlayerController) {
+      window.MiniPlayerController.onTrackChanged();
+    }
   };
 
   media.onloadedmetadata = () => {
@@ -136,13 +306,18 @@ loadFile = () => {
     updateSliderFill(slider);
     media.playbackRate = appSettings.playbackRate || 1;
     media.defaultPlaybackRate = appSettings.playbackRate || 1;
+    if (currentTrackMeta) {
+      renderTrackMetadata(currentTrackMeta, media.videoWidth > 0);
+    }
   };
 
   media.oncanplay = () => {
     loader.classList.add("hide");
-    document.title = `${currentFile.name} · Mario Player`;
-    fileName.textContent = `${fileIndex + 1} - ${currentFile.name}`;
-    fileName.classList.add("is-playing");
+    updateTopBarMetadata(currentTrackMeta, fileIndex, currentFile.name);
+    updateMediaSession(currentTrackMeta, currentCoverUrl);
+    if (window.MiniPlayerController) {
+      window.MiniPlayerController.onTrackChanged();
+    }
 
     const items = document.querySelectorAll(".playlist-item");
     Array.from(items).forEach((e) => {
@@ -217,6 +392,9 @@ togglePlaylist = () => {
 showControls = () => {
   controls.classList.remove("hide");
   controls.classList.add("show");
+  if (trackMetadataEl) {
+    trackMetadataEl.classList.remove("is-controls-hidden");
+  }
 };
 
 hideControls = () => {
@@ -225,6 +403,9 @@ hideControls = () => {
   }
   controls.classList.remove("show");
   controls.classList.add("hide");
+  if (trackMetadataEl && trackMetadataEl.classList.contains("is-video")) {
+    trackMetadataEl.classList.add("is-controls-hidden");
+  }
 };
 
 changePlayState = () => {
@@ -456,12 +637,17 @@ applyAppSettings = (settingsObj, persist = false) => {
 
   seekStepSeconds = appSettings.seekStep;
   autoHideControlsEnabled = appSettings.autoHideControls;
+  autoMiniPlayerEnabled = appSettings.autoMiniPlayer;
   if (!autoHideControlsEnabled) {
     showControls();
   }
 
   media.defaultPlaybackRate = appSettings.playbackRate;
   media.playbackRate = appSettings.playbackRate;
+
+  if (window.MiniPlayerController) {
+    window.MiniPlayerController.applyAutoMiniPlayerSetting(autoMiniPlayerEnabled);
+  }
 
   if (window.VisualizerController) {
     window.VisualizerController.setConfig({
@@ -508,6 +694,12 @@ syncSettingsUI = () => {
       appSettings.autoHideControls ? "true" : "false"
     );
   }
+  if (settingAutominiplayerSwitch) {
+    settingAutominiplayerSwitch.setAttribute(
+      "aria-checked",
+      appSettings.autoMiniPlayer ? "true" : "false"
+    );
+  }
   if (settingVisualizerSwitch) {
     settingVisualizerSwitch.setAttribute(
       "aria-checked",
@@ -525,6 +717,9 @@ openSettings = () => {
     settingsBtn.classList.add("is-active");
     settingsBtn.setAttribute("aria-expanded", "true");
   }
+  if (window.MiniPlayerController) {
+    window.MiniPlayerController.onSettingsOpened();
+  }
   if (window.location.hash !== "#settings") {
     history.replaceState(null, "", "#settings");
   }
@@ -537,6 +732,9 @@ closeSettings = () => {
   if (settingsBtn) {
     settingsBtn.classList.remove("is-active");
     settingsBtn.setAttribute("aria-expanded", "false");
+  }
+  if (window.MiniPlayerController) {
+    window.MiniPlayerController.onSettingsClosed();
   }
   if (window.location.hash === "#settings") {
     history.replaceState(null, "", window.location.pathname + window.location.search);
@@ -561,6 +759,7 @@ resetAllSettings = () => {
         seekStep: 10,
         playbackRate: 1,
         autoHideControls: true,
+        autoMiniPlayer: true,
         visualizerEnabled: true,
         visualizerStyle: "bars",
       };

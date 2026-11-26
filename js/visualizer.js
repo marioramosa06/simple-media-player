@@ -2,6 +2,7 @@
   const canvas = document.querySelector("#visualizer");
   const videoEl = document.querySelector("#video");
   const controlsEl = document.querySelector(".controls");
+  const trackMetaEl = document.querySelector("#track-metadata");
   if (!canvas || !videoEl || !window.VisualizerUtils) {
     return;
   }
@@ -192,8 +193,22 @@
     }
 
     const isAudioOnly = videoEl.videoWidth === 0;
+    const controlsHidden = controlsEl && controlsEl.classList.contains("hide");
+    const controlsTop =
+      controlsEl && !controlsHidden && controlsEl.offsetTop > 0
+        ? controlsEl.offsetTop
+        : height - 134;
+    const metaBottom =
+      isAudioOnly &&
+      trackMetaEl &&
+      !trackMetaEl.hidden &&
+      trackMetaEl.classList.contains("is-audio")
+        ? trackMetaEl.offsetTop + trackMetaEl.offsetHeight + 16
+        : 0;
+    const audioBandHeight = Math.max(100, controlsTop - 16 - metaBottom);
+
     const maxBarHeight = isAudioOnly
-      ? Math.min(220, Math.max(90, height * 0.3))
+      ? Math.min(200, Math.max(64, audioBandHeight * 0.56))
       : Math.min(115, Math.max(52, height * 0.16));
 
     const activeData = isPlaying ? frequencyData : null;
@@ -218,9 +233,8 @@
     }
 
     const { primary, secondary, primaryRgb, secondaryRgb } = getThemeColors();
-    const controlsHidden = controlsEl && controlsEl.classList.contains("hide");
     const centerY = isAudioOnly
-      ? Math.max(maxBarHeight * 0.6 + 40, (height - 110) * 0.5)
+      ? metaBottom + audioBandHeight * 0.5
       : Math.max(maxBarHeight + 48, height - (controlsHidden ? 36 : 134));
 
     if (isAudioOnly) {

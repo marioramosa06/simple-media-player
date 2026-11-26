@@ -44,6 +44,24 @@
         <video id="video" preload="auto" autoplay playsinline></video>
         <canvas id="visualizer" class="visualizer-overlay" data-testid="visualizer" aria-hidden="true"></canvas>
 
+        <div class="track-metadata" id="track-metadata" data-testid="track-metadata" hidden>
+          <img class="track-cover" id="track-cover" alt="Album art" hidden />
+          <div class="track-meta-text">
+            <div class="track-meta-title" id="track-meta-title"></div>
+            <div class="track-meta-details" id="track-meta-details"></div>
+          </div>
+        </div>
+
+        <div class="pip-active-notice" id="pip-active-notice" data-testid="pip-active-notice" hidden>
+          <i class="ri-picture-in-picture-2-line pip-notice-icon" aria-hidden="true"></i>
+          <div class="pip-notice-title">Playing in Mini-Player</div>
+          <div class="pip-notice-copy">Playback continues in your floating Picture-in-Picture window.</div>
+          <button type="button" class="primary-cta compact" id="pip-exit-btn">
+            <i class="ri-picture-in-picture-exit-line" aria-hidden="true"></i>
+            <span>Return to Player</span>
+          </button>
+        </div>
+
         <div class="empty-state" id="empty-state">
           <div class="empty-icon" aria-hidden="true">
             <i class="ri-film-line"></i>
@@ -99,6 +117,9 @@
             </div>
 
             <div class="bottom end">
+              <button type="button" class="icon-btn mini-player-btn" id="mini-player-btn" title="Mini-Player (I)" aria-label="Mini-Player" aria-pressed="false" disabled>
+                <i class="ri-picture-in-picture-2-line" id="mini-player-btn-icon" aria-hidden="true"></i>
+              </button>
               <button type="button" class="icon-btn volume" id="mute-btn" title="Mute or unmute" aria-label="Mute">
                 <i class="ri-volume-up-fill volume-icon" aria-hidden="true"></i>
               </button>
@@ -235,6 +256,16 @@
               <span class="switch-thumb"></span>
             </button>
           </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Auto Mini-Player</div>
+              <div class="setting-desc">Keep playback floating in a corner Mini-Player when opening Settings or switching away.</div>
+            </div>
+            <button type="button" class="switch-btn" id="setting-autominiplayer-switch" role="switch" aria-checked="true" aria-label="Auto mini-player">
+              <span class="switch-thumb"></span>
+            </button>
+          </div>
         </div>
 
         <div class="settings-section">
@@ -271,10 +302,48 @@
             <div class="shortcut-item"><span>Mute / Unmute</span><kbd>M</kbd></div>
             <div class="shortcut-item"><span>Previous / Next Track</span><kbd>P / N</kbd></div>
             <div class="shortcut-item"><span>Toggle Playlist</span><kbd>L</kbd></div>
+            <div class="shortcut-item"><span>Toggle Mini-Player</span><kbd>I</kbd></div>
           </div>
         </div>
       </div>
     </section>
+
+    <aside class="mini-player-dock" id="mini-player-dock" data-testid="mini-player-dock" aria-label="Mini-Player" hidden>
+      <div class="mini-dock-top">
+        <canvas class="mini-dock-preview" id="mini-dock-preview" width="128" height="72" aria-hidden="true"></canvas>
+        <div class="mini-dock-info">
+          <div class="mini-dock-title" id="mini-dock-title">No media loaded</div>
+          <div class="mini-dock-subtitle" id="mini-dock-subtitle"></div>
+        </div>
+        <button type="button" class="icon-btn mini-dock-close" id="mini-dock-close" aria-label="Close Mini-Player" title="Close Mini-Player">
+          <i class="ri-close-line" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="mini-dock-controls">
+        <div class="mini-dock-transport">
+          <button type="button" class="icon-btn mini-dock-btn" id="mini-dock-prev" aria-label="Previous track" title="Previous track">
+            <i class="ri-skip-back-fill" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="icon-btn mini-dock-play" id="mini-dock-play" aria-label="Play" title="Play or pause">
+            <i class="ri-play-fill" id="mini-dock-play-icon" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="icon-btn mini-dock-btn" id="mini-dock-next" aria-label="Next track" title="Next track">
+            <i class="ri-skip-forward-fill" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="mini-dock-actions">
+          <button type="button" class="icon-btn mini-dock-btn" id="mini-dock-pip" aria-label="Pop out Picture-in-Picture" title="Picture-in-Picture window">
+            <i class="ri-picture-in-picture-2-line" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="icon-btn mini-dock-btn" id="mini-dock-expand" aria-label="Return to player" title="Return to player">
+            <i class="ri-fullscreen-exit-line" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <video id="pip-video" class="pip-backing-video" muted playsinline aria-hidden="true"></video>
+    <canvas id="pip-canvas" width="480" height="270" class="sr-only" aria-hidden="true"></canvas>
 
     <div class="drop-overlay" id="drop-overlay" aria-hidden="true">
       <div class="drop-overlay-card">
@@ -293,7 +362,10 @@
   <script src="./js/player-utils.js"></script>
   <script src="./js/visualizer-utils.js"></script>
   <script src="./js/visualizer.js"></script>
+  <script src="./js/metadata-utils.js"></script>
+  <script src="./js/mini-player-utils.js"></script>
   <script src="./js/functions.js"></script>
+  <script src="./js/mini-player.js"></script>
   <script src="./js/app.js"></script>
 </body>
 

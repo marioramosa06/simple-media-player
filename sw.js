@@ -1,4 +1,4 @@
-const cacheName = "static-v6";
+const cacheName = "static-v8";
 const assets = [
   "./",
   "./index.html",
@@ -23,6 +23,9 @@ const assets = [
   "./js/volume-utils.js",
   "./js/visualizer-utils.js",
   "./js/visualizer.js",
+  "./js/metadata-utils.js",
+  "./js/mini-player-utils.js",
+  "./js/mini-player.js",
 ];
 
 self.addEventListener("install", (event) => {

@@ -13,6 +13,7 @@
     seekStep: 10,
     playbackRate: 1,
     autoHideControls: true,
+    autoMiniPlayer: true,
     visualizerEnabled: true,
     visualizerStyle: "bars",
   });
@@ -43,6 +44,11 @@
         ? input.autoHideControls
         : DEFAULT_SETTINGS.autoHideControls;
 
+    const autoMiniPlayer =
+      typeof input.autoMiniPlayer === "boolean"
+        ? input.autoMiniPlayer
+        : DEFAULT_SETTINGS.autoMiniPlayer;
+
     const visualizerEnabled =
       typeof input.visualizerEnabled === "boolean"
         ? input.visualizerEnabled
@@ -60,6 +66,7 @@
       seekStep,
       playbackRate,
       autoHideControls,
+      autoMiniPlayer,
       visualizerEnabled,
       visualizerStyle,
     };

@@ -36,6 +36,28 @@ const settingsVolumeSlider = document.querySelector("#settings-volume-slider");
 const settingsVolumeValue = document.querySelector("#settings-volume-value");
 const settingAutohideSwitch = document.querySelector("#setting-autohide-switch");
 const settingVisualizerSwitch = document.querySelector("#setting-visualizer-switch");
+const trackMetadataEl = document.querySelector("#track-metadata");
+const trackCoverEl = document.querySelector("#track-cover");
+const trackMetaTitleEl = document.querySelector("#track-meta-title");
+const trackMetaDetailsEl = document.querySelector("#track-meta-details");
+const miniPlayerBtn = document.querySelector("#mini-player-btn");
+const miniPlayerBtnIcon = document.querySelector("#mini-player-btn-icon");
+const settingAutominiplayerSwitch = document.querySelector("#setting-autominiplayer-switch");
+const pipActiveNotice = document.querySelector("#pip-active-notice");
+const pipExitBtn = document.querySelector("#pip-exit-btn");
+const miniPlayerDock = document.querySelector("#mini-player-dock");
+const miniDockPreview = document.querySelector("#mini-dock-preview");
+const miniDockTitle = document.querySelector("#mini-dock-title");
+const miniDockSubtitle = document.querySelector("#mini-dock-subtitle");
+const miniDockPlay = document.querySelector("#mini-dock-play");
+const miniDockPlayIcon = document.querySelector("#mini-dock-play-icon");
+const miniDockPrev = document.querySelector("#mini-dock-prev");
+const miniDockNext = document.querySelector("#mini-dock-next");
+const miniDockPip = document.querySelector("#mini-dock-pip");
+const miniDockExpand = document.querySelector("#mini-dock-expand");
+const miniDockClose = document.querySelector("#mini-dock-close");
+const pipVideo = document.querySelector("#pip-video");
+const pipCanvas = document.querySelector("#pip-canvas");
 
 let filelist = [];
 let fileIndex = 0;
@@ -44,7 +66,12 @@ let repeat = false;
 let repeatMode = "off";
 let seekStepSeconds = 10;
 let autoHideControlsEnabled = true;
+let autoMiniPlayerEnabled = true;
 let listItem = [];
+let currentMediaUrl = null;
+let currentCoverUrl = null;
+let currentTrackMeta = null;
+const fileMetadataMap = new WeakMap();
 let appSettings = window.SettingsUtils
   ? { ...window.SettingsUtils.DEFAULT_SETTINGS }
   : {
@@ -53,6 +80,7 @@ let appSettings = window.SettingsUtils
       seekStep: 10,
       playbackRate: 1,
       autoHideControls: true,
+      autoMiniPlayer: true,
       visualizerEnabled: true,
       visualizerStyle: "bars",
     };

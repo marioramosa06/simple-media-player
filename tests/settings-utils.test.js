@@ -30,6 +30,7 @@ test("normalizeSettings preserves valid values", () => {
     seekStep: 15,
     playbackRate: 1.5,
     autoHideControls: false,
+    autoMiniPlayer: false,
     visualizerEnabled: false,
     visualizerStyle: "waveform",
   };

@@ -58,6 +58,15 @@ if (settingAutohideSwitch) {
   };
 }
 
+if (settingAutominiplayerSwitch) {
+  settingAutominiplayerSwitch.onclick = () => {
+    applyAppSettings(
+      { ...appSettings, autoMiniPlayer: !appSettings.autoMiniPlayer },
+      true
+    );
+  };
+}
+
 if (settingVisualizerSwitch) {
   settingVisualizerSwitch.onclick = () => {
     applyAppSettings(
@@ -148,6 +157,11 @@ window.onkeydown = (e) => {
   }
   if (e.key == "L" || e.key == "l") {
     togglePlaylist();
+  }
+  if (e.key == "I" || e.key == "i") {
+    if (window.MiniPlayerController) {
+      window.MiniPlayerController.toggleMiniPlayer();
+    }
   }
   if (e.key == "Escape") {
     if (settingsPageEl && !settingsPageEl.hidden) {
